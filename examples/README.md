@@ -2,7 +2,7 @@
 
 Screenshots from a demonstration setup on an Android tablet, captured on 18 October 2026. These examples show screen layouts, themes and configuration; they are screenshots, not importable project files. Values are illustrative and may change between captures. Gauge-editor previews use demo values.
 
-[Download ARAAMA 0.1.2 Beta](https://github.com/groromario77-collab/ARAAMA-Universal-HMI-Dashboard/releases/tag/v0.1.2) · [Report an issue](https://github.com/groromario77-collab/ARAAMA-Universal-HMI-Dashboard/issues)
+[Download ARAAMA 0.1.5 Beta](https://github.com/groromario77-collab/ARAAMA-Universal-HMI-Dashboard/releases/tag/v0.1.5) · [Report an issue](https://github.com/groromario77-collab/ARAAMA-Universal-HMI-Dashboard/issues)
 
 ## One dashboard, seven appearances
 
