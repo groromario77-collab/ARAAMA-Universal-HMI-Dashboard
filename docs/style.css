@@ -8,7 +8,9 @@
   --ice: #71d7ff;
   --electric: #45baff;
   --lit-edge: #427f9d;
-  --panel-glow: 0 0 .55rem #40d8ff26, 0 .15rem 1.6rem #157cce28;
+  --panel-glow:
+    -.35rem .25rem 1.65rem .35rem rgb(29 195 255 / 25%),
+    .45rem .8rem 3.25rem .7rem rgb(23 126 255 / 32%);
   font: 1rem/1.55 "Segoe UI", system-ui, sans-serif;
   color: var(--ink);
   background: var(--night);
@@ -77,7 +79,7 @@ img { display: block; width: 100%; height: auto; border-radius: .65rem; }
 .screen-grid figure { margin: 0; }
 .screen-grid a { display: block; border-radius: .65rem; }
 .screen-grid figcaption { margin-top: .6rem; }
-.downloads { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; }
+.downloads { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.5rem; isolation: isolate; }
 article {
   display: flex;
   flex-direction: column;
@@ -86,7 +88,15 @@ article {
   border: 1px solid var(--lit-edge);
   border-radius: .6rem;
   background: var(--surface);
-  background-image: radial-gradient(ellipse at top left, #2bc5ff12, transparent 70%);
+}
+.downloads article { position: relative; }
+.downloads article::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  border-radius: inherit;
   box-shadow: var(--panel-glow);
 }
 article p { margin: .55rem 0 1rem; }
