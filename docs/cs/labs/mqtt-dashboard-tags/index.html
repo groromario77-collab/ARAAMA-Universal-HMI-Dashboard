@@ -1,0 +1,19 @@
+<!doctype html>
+<html lang="cs">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Čtyři karty na tabletu z jediného MQTT tématu · ARAAMA</title>
+<meta name="description" content="Jak ze dvou polí JSON v jedné MQTT zprávě vytvořit tagy pro stupnice teploty a vlhkosti a jejich grafy na tabletu.">
+<link rel="canonical" href="https://groromario77-collab.github.io/ARAAMA-Universal-HMI-Dashboard/cs/labs/mqtt-dashboard-tags/">
+<link rel="alternate" hreflang="en" href="https://groromario77-collab.github.io/ARAAMA-Universal-HMI-Dashboard/labs/mqtt-dashboard-tags/">
+<link rel="alternate" hreflang="ru" href="https://groromario77-collab.github.io/ARAAMA-Universal-HMI-Dashboard/ru/labs/mqtt-dashboard-tags/">
+<link rel="alternate" hreflang="cs" href="https://groromario77-collab.github.io/ARAAMA-Universal-HMI-Dashboard/cs/labs/mqtt-dashboard-tags/">
+<link rel="alternate" hreflang="x-default" href="https://groromario77-collab.github.io/ARAAMA-Universal-HMI-Dashboard/labs/mqtt-dashboard-tags/">
+<link rel="stylesheet" href="../../../style.css?v=halo-22">
+<style>main{max-width:50rem;margin:auto}h1{font-size:clamp(2.3rem,6vw,4rem);line-height:1.08}figure{margin:1.5rem 0}figcaption{margin:.6rem 0;color:#bed2d4}pre{overflow:auto;padding:1rem;background:#10282f}code{overflow-wrap:anywhere}main img{box-shadow:0 0 0 1px var(--lit-edge),var(--panel-glow);max-width:44rem}nav{justify-content:space-between;align-items:center}li > figure{margin:1rem 0 1.5rem} main li{margin-block:.8rem} main ol{padding-inline-start:1.6rem}</style>
+</head>
+<body><nav><a href="../../">Hlavní stránka ARAAMA</a><details class="languages"><summary>Jazyk · Čeština</summary><ul><li><a href="../../../labs/mqtt-dashboard-tags/" lang="en" hreflang="en">English</a></li><li><a href="../../../ru/labs/mqtt-dashboard-tags/" lang="ru" hreflang="ru">Русский</a></li><li><a href="../../../cs/labs/mqtt-dashboard-tags/" lang="cs" hreflang="cs" aria-current="page">Čeština</a></li></ul></details></nav>
+<main><h1>Čtyři karty na tabletu z jediného MQTT tématu</h1>
+<p>U pokojového čidla se hodí dvě stupnice, jedna pro teplotu a druhá pro vlhkost, a pod každou graf za posledních pár hodin. Když se téma a cesta k poli nastavují u každé karty zvlášť, stačí jediný překlep a graf zůstane prázdný.</p>
+<p>V příkladu RoomAir poslal generátor do místního brokeru na téma <code>lab/room-air/state</code> zprávu <code>{"temperature_c":22.0,"humidity_pct":49.6}</code>. Další zpráva obsahovala stále 22,0 °C, ale vlhkost klesla na 49,4 %. Na dvojici zpráv si lze snadno ověřit obě vazby.</p>
+<h2>Nastavení panelu</h2><ol><li><p>Spusťte generátor, otevřete vyhledávání MQTT a vyberte <code>lab/room-air/state</code>. Zvolte pole <code>$.temperature_c</code> a uložte vazbu jako tag teploty s jednotkou °C. Pole <code>$.humidity_pct</code> uložte jako tag vlhkosti v procentech.</p><figure><img width="789" height="703" src="../../../labs/files/settings/mqtt-room-cs.webp" alt="Nastavení tagu teploty RoomAir. Téma lab/room-air/state a pole $.temperature_c."></figure></li><li><p>U obou tagů zapněte historii. Stupnici teploty i jejímu grafu přiřaďte stejný tag teploty. Totéž udělejte pro vlhkost.</p></li><li><p>Hotový projekt zaznamenává změny. Po druhé zprávě má vlhkost klesnout z 49,6 % na 49,4 %, zatímco teplota zůstane na 22,0 °C. V historii teploty proto další bod zatím nečekejte. V archivu je připravený panel i generátor, příklad si tedy můžete vyzkoušet bez ESP32. <a href="https://groromario77-collab.github.io/ARAAMA-Universal-HMI-Dashboard/cs/labs/room-air/">Návod RoomAir a soubory ke stažení</a></p></li></ol></main></body></html>

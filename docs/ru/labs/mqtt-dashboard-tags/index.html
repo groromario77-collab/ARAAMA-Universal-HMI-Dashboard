@@ -1,0 +1,19 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Один MQTT-топик, два тега и четыре карточки · ARAAMA</title>
+<meta name="description" content="Как из одного MQTT-сообщения получить два тега для шкал температуры, влажности и двух графиков на планшете Android.">
+<link rel="canonical" href="https://groromario77-collab.github.io/ARAAMA-Universal-HMI-Dashboard/ru/labs/mqtt-dashboard-tags/">
+<link rel="alternate" hreflang="en" href="https://groromario77-collab.github.io/ARAAMA-Universal-HMI-Dashboard/labs/mqtt-dashboard-tags/">
+<link rel="alternate" hreflang="ru" href="https://groromario77-collab.github.io/ARAAMA-Universal-HMI-Dashboard/ru/labs/mqtt-dashboard-tags/">
+<link rel="alternate" hreflang="cs" href="https://groromario77-collab.github.io/ARAAMA-Universal-HMI-Dashboard/cs/labs/mqtt-dashboard-tags/">
+<link rel="alternate" hreflang="x-default" href="https://groromario77-collab.github.io/ARAAMA-Universal-HMI-Dashboard/labs/mqtt-dashboard-tags/">
+<link rel="stylesheet" href="../../../style.css?v=halo-22">
+<style>main{max-width:50rem;margin:auto}h1{font-size:clamp(2.3rem,6vw,4rem);line-height:1.08}figure{margin:1.5rem 0}figcaption{margin:.6rem 0;color:#bed2d4}pre{overflow:auto;padding:1rem;background:#10282f}code{overflow-wrap:anywhere}main img{box-shadow:0 0 0 1px var(--lit-edge),var(--panel-glow);max-width:44rem}nav{justify-content:space-between;align-items:center}li > figure{margin:1rem 0 1.5rem} main li{margin-block:.8rem} main ol{padding-inline-start:1.6rem}</style>
+</head>
+<body><nav><a href="../../">Главная ARAAMA</a><details class="languages"><summary>Язык · Русский</summary><ul><li><a href="../../../labs/mqtt-dashboard-tags/" lang="en" hreflang="en">English</a></li><li><a href="../../../ru/labs/mqtt-dashboard-tags/" lang="ru" hreflang="ru" aria-current="page">Русский</a></li><li><a href="../../../cs/labs/mqtt-dashboard-tags/" lang="cs" hreflang="cs">Čeština</a></li></ul></details></nav>
+<main><h1>Один MQTT-топик, два тега и четыре карточки</h1>
+<p>Для комнатного датчика хотелось видеть температуру и влажность, а под каждой шкалой — график за последние часы. Получается четыре карточки. Вручную прописывать в каждой один и тот же топик утомительно, а опечатка в имени поля оставляет пустой график.</p>
+<p>В практикуме RoomAir генератор отправил в локальный брокер сообщение <code>{"temperature_c":22.0,"humidity_pct":49.6}</code> в топик <code>lab/room-air/state</code>. Следующее сообщение принесло те же 22,0 °C и уже 49,4 % влажности. На этих двух сообщениях удобно проверить, правильно ли выбраны поля.</p>
+<h2>Настройка панели</h2><ol><li><p>Пока генератор работает, откройте «Поиск MQTT» и выберите <code>lab/room-air/state</code>. Выберите поле <code>$.temperature_c</code>, сохраните привязку как тег температуры и задайте единицу °C. Аналогично сохраните <code>$.humidity_pct</code> как влажность в процентах.</p><figure><img width="789" height="703" src="../../../labs/files/settings/mqtt-room-ru.webp" alt="Настройка тега температуры RoomAir. Топик lab/room-air/state и поле $.temperature_c."></figure></li><li><p>Включите историю для обоих тегов. Для шкалы и графика температуры выберите один и тот же тег температуры. Повторите с влажностью.</p></li><li><p>В готовом проекте запись настроена по изменению. На втором сообщении влажность должна перейти с 49,6 на 49,4 %, а температура останется на 22,0 °C. Ещё одну точку температуры при таком значении ждать не нужно. С готовой панели удобно начать и без ESP32 — в архиве есть генератор. <a href="https://groromario77-collab.github.io/ARAAMA-Universal-HMI-Dashboard/ru/labs/room-air/">Практикум, генератор и панель RoomAir</a></p></li></ol></main></body></html>

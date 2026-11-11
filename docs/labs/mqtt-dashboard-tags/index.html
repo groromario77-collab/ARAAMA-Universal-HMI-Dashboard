@@ -1,0 +1,19 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Build four dashboard cards from one MQTT topic · ARAAMA</title>
+<meta name="description" content="Use two JSON fields from one MQTT message for temperature and humidity gauges and history charts in ARAAMA on Android.">
+<link rel="canonical" href="https://groromario77-collab.github.io/ARAAMA-Universal-HMI-Dashboard/labs/mqtt-dashboard-tags/">
+<link rel="alternate" hreflang="en" href="https://groromario77-collab.github.io/ARAAMA-Universal-HMI-Dashboard/labs/mqtt-dashboard-tags/">
+<link rel="alternate" hreflang="ru" href="https://groromario77-collab.github.io/ARAAMA-Universal-HMI-Dashboard/ru/labs/mqtt-dashboard-tags/">
+<link rel="alternate" hreflang="cs" href="https://groromario77-collab.github.io/ARAAMA-Universal-HMI-Dashboard/cs/labs/mqtt-dashboard-tags/">
+<link rel="alternate" hreflang="x-default" href="https://groromario77-collab.github.io/ARAAMA-Universal-HMI-Dashboard/labs/mqtt-dashboard-tags/">
+<link rel="stylesheet" href="../../style.css?v=halo-22">
+<style>main{max-width:50rem;margin:auto}h1{font-size:clamp(2.3rem,6vw,4rem);line-height:1.08}figure{margin:1.5rem 0}figcaption{margin:.6rem 0;color:#bed2d4}pre{overflow:auto;padding:1rem;background:#10282f}code{overflow-wrap:anywhere}main img{box-shadow:0 0 0 1px var(--lit-edge),var(--panel-glow);max-width:44rem}nav{justify-content:space-between;align-items:center}li > figure{margin:1rem 0 1.5rem} main li{margin-block:.8rem} main ol{padding-inline-start:1.6rem}</style>
+</head>
+<body><nav><a href="../../">ARAAMA home</a><details class="languages"><summary>Language · English</summary><ul><li><a href="../../labs/mqtt-dashboard-tags/" lang="en" hreflang="en" aria-current="page">English</a></li><li><a href="../../ru/labs/mqtt-dashboard-tags/" lang="ru" hreflang="ru">Русский</a></li><li><a href="../../cs/labs/mqtt-dashboard-tags/" lang="cs" hreflang="cs">Čeština</a></li></ul></details></nav>
+<main><h1>Build four dashboard cards from one MQTT topic</h1>
+<p>For a room sensor I wanted two gauges, one for temperature and one for humidity, with a history chart below each. Entering the topic and JSON path four times leaves four places to check when a chart stays empty.</p>
+<p>In the RoomAir workshop the generator published <code>{"temperature_c":22.0,"humidity_pct":49.6}</code> to <code>lab/room-air/state</code> on a local broker. The next message still reported 22.0 °C, but humidity had dropped to 49.4%. That pair makes a quick check for both bindings.</p>
+<h2>Set up the dashboard</h2><ol><li><p>Start the generator, open <em>MQTT search</em> and select <code>lab/room-air/state</code>. Pick <code>$.temperature_c</code> and save the binding as a temperature tag in °C. Save <code>$.humidity_pct</code> as a second tag in percent.</p><figure><img width="789" height="703" src="../../labs/files/settings/mqtt-room-en.webp" alt="RoomAir temperature tag showing the topic lab/room-air/state and field $.temperature_c."></figure></li><li><p>Enable history on both tags. Choose the same temperature tag for the temperature gauge and its chart. Do the same for humidity.</p></li><li><p>The supplied project records changes. On the second message the humidity gauge should drop from 49.6% to 49.4%, while the temperature gauge stays at 22.0 °C. An unchanged temperature does not need another sample in that history. The download includes the panel and a generator so you can try this without an ESP32. <a href="https://groromario77-collab.github.io/ARAAMA-Universal-HMI-Dashboard/labs/room-air/">RoomAir workshop and downloads</a></p></li></ol></main></body></html>
