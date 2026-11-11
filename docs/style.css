@@ -9,7 +9,7 @@
   --electric: #45baff;
   --lit-edge: #365c71;
   --panel-glow:
-    0 2px 10px rgb(73 169 213 / 11%),
+    0 2px 16px 1px rgb(56 177 236 / 22%),
     0 4px 9px -4px rgb(0 7 17 / 32%);
   font: 1rem/1.55 "Segoe UI", system-ui, sans-serif;
   color: var(--ink);
