@@ -7,10 +7,10 @@
   --muted: #b2c9e2;
   --ice: #71d7ff;
   --electric: #45baff;
-  --lit-edge: #427f9d;
+  --lit-edge: #365c71;
   --panel-glow:
-    -.35rem .25rem 1.65rem .35rem rgb(29 195 255 / 20.2%),
-    .45rem .8rem 3.25rem .7rem rgb(23 126 255 / 26.26%);
+    0 2px 10px rgb(73 169 213 / 11%),
+    0 4px 9px -4px rgb(0 7 17 / 32%);
   font: 1rem/1.55 "Segoe UI", system-ui, sans-serif;
   color: var(--ink);
   background: var(--night);
@@ -68,7 +68,7 @@ img { display: block; width: 100%; height: auto; border-radius: .65rem; }
 .dashboard-preview, .capture-pair img, figure img[src$="panel.webp"], .screen-grid img {
   box-shadow: 0 0 0 1px var(--lit-edge), var(--panel-glow);
 }
-.dashboard-preview:hover, .screen-grid a:hover img { box-shadow: 0 0 0 1px var(--ice), var(--panel-glow); }
+.dashboard-preview:hover, .screen-grid a:hover img { box-shadow: 0 0 0 1px #598399, var(--panel-glow); }
 .gallery-nav { justify-content: space-between; align-items: center; gap: .75rem; }
 .gallery h1 { font-size: clamp(2.1rem, 5vw, 3.5rem); line-height: 1.12; }
 .screen-grid {
