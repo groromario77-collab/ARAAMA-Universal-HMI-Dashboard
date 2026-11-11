@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="cs">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ARAAMA — panel pro Android s podporou MQTT, Home Assistant a Modbus</title>
+<meta name="description" content="Zobrazte údaje ze senzorů ESP32, systému Home Assistant a měřidel Modbus na jednom tabletu. Pro menší MQTT panely je k dispozici odlehčená verze 0.1.5.">
+<link rel="canonical" href="https://groromario77-collab.github.io/ARAAMA-Universal-HMI-Dashboard/cs/">
+<link rel="alternate" hreflang="en" href="https://groromario77-collab.github.io/ARAAMA-Universal-HMI-Dashboard/">
+<link rel="alternate" hreflang="ru" href="https://groromario77-collab.github.io/ARAAMA-Universal-HMI-Dashboard/ru/">
+<link rel="alternate" hreflang="cs" href="https://groromario77-collab.github.io/ARAAMA-Universal-HMI-Dashboard/cs/">
+<link rel="alternate" hreflang="x-default" href="https://groromario77-collab.github.io/ARAAMA-Universal-HMI-Dashboard/">
+<meta property="og:title" content="ARAAMA — panel pro Android s podporou MQTT, Home Assistant a Modbus">
+<meta property="og:description" content="Zobrazte údaje ze senzorů ESP32, systému Home Assistant a měřidel Modbus na jednom tabletu. Pro menší MQTT panely je k dispozici odlehčená verze 0.1.5.">
+<meta property="og:url" content="https://groromario77-collab.github.io/ARAAMA-Universal-HMI-Dashboard/cs/">
+<meta property="og:image" content="https://raw.githubusercontent.com/groromario77-collab/ARAAMA-Universal-HMI-Dashboard/df6d8b613c68800453d1d92a6505d6f9eeb0ee4c/examples/01-neon-dashboard.jpg">
+<link rel="stylesheet" href="../style.css">
+</head>
+<body>
+<nav aria-label="Jazyk">
+  <details class="languages">
+    <summary>Jazyk · Čeština</summary>
+    <ul>
+      <li><a href="../" lang="en" hreflang="en">English</a></li>
+      <li><a href="../ru/" lang="ru" hreflang="ru">Русский</a></li>
+      <li><a href="../cs/" lang="cs" hreflang="cs" aria-current="page">Čeština</a></li>
+    </ul>
+  </details>
+</nav>
+<main>
+<header>
+  <div>
+    <h1>ARAAMA</h1>
+    <h2>Jeden tablet s Androidem pro čidla, měřidla i vypínače</h2>
+    <p>Na jedné obrazovce můžete zobrazit teplotu z ESP32, vypínač z Home Assistantu i příkon z elektroměru s rozhraním Modbus. V nastavení karty vidíte, odkud hodnota přichází a kam se při stisku odešle povel.</p>
+    <p>Zdarma · Android 8.0 a novější</p>
+    <div class="downloads">
+      <article>
+        <h3>Odlehčená verze · 0.1.5</h3>
+        <p>Pro menší panel s několika MQTT čidly, grafem a ovládáním relé.</p>
+        <a class="button" href="https://github.com/groromario77-collab/ARAAMA-Universal-HMI-Dashboard/releases/download/v0.1.5/ARAAMA-0.1.5.apk">Stáhnout APK · 39 MiB</a>
+        <a href="https://github.com/groromario77-collab/ARAAMA-Universal-HMI-Dashboard/releases/tag/v0.1.5">Přehled změn</a>
+      </article>
+      <article>
+        <h3>Aktuální verze · 0.1.10</h3>
+        <p>Přidává Modbus, WebSocket a Socket.IO. Cíl povelu a zdroj skutečného stavu lze nastavit samostatně.</p>
+        <a class="button" href="https://github.com/groromario77-collab/ARAAMA-Universal-HMI-Dashboard/releases/download/v0.1.10/ARAAMA-0.1.10-101-release.apk">Stáhnout APK · 110 MiB</a>
+        <a href="https://github.com/groromario77-collab/ARAAMA-Universal-HMI-Dashboard/releases/tag/v0.1.10">Přehled změn</a>
+      </article>
+    </div>
+    <p><a href="https://github.com/groromario77-collab/ARAAMA-Universal-HMI-Dashboard/tree/main/examples">Ukázky obrazovek</a></p>
+  </div>
+  <a href="https://github.com/groromario77-collab/ARAAMA-Universal-HMI-Dashboard/tree/main/examples"><img src="https://raw.githubusercontent.com/groromario77-collab/ARAAMA-Universal-HMI-Dashboard/df6d8b613c68800453d1d92a6505d6f9eeb0ee4c/examples/01-neon-dashboard.jpg" width="800" height="1280" alt="Panel na tabletu s údaji o teplotě v místnosti, počasí, napětí a proudu, s vypínači a grafem teploty"></a>
+</header>
+<section><h2>Od MQTT zprávy ke grafu teploty</h2><p>Připojte tablet k MQTT brokeru a počkejte na zprávu z ESP32. Ve vyhledávání MQTT vyberte téma a v jeho JSON zprávě pole s teplotou. Přiřaďte je k ukazateli a zapněte záznam historie. V grafu pak uvidíte průběh teploty.</p></section>
+<section><h2>Home Assistant a Modbus na jednom panelu</h2><p>Importujte entity vybrané místnosti z Home Assistantu. Elektroměr připojte přes Modbus TCP nebo přes bránu pro Modbus RTU přes TCP. Registr výkonu vyberte podle tabulky registrů konkrétního měřidla. Panel umí přijímat hodnoty také přes HTTP/REST, WebSocket a Socket.IO.</p></section>
+<section>
+  <h2>Instalace a příručky</h2><p>Otevřete soubor APK na zařízení s Androidem. Před aktualizací si projekt exportujte. Verzi 0.1.10 (sestavení 101) můžete nainstalovat přes verzi 0.1.5.</p>
+  <p><a href="https://github.com/groromario77-collab/ARAAMA-Universal-HMI-Dashboard/releases/download/v0.1.10/ARAAMA-User-Guide-CS.pdf">Česká příručka k verzi 0.1.10 (PDF)</a>
+  · <a lang="en" href="https://github.com/groromario77-collab/ARAAMA-Universal-HMI-Dashboard/releases/download/v0.1.10/ARAAMA-User-Guide-EN.pdf">English (PDF)</a> · <a lang="ru" href="https://github.com/groromario77-collab/ARAAMA-Universal-HMI-Dashboard/releases/download/v0.1.10/ARAAMA-User-Guide-RU.pdf">Русский (PDF)</a></p>
+</section>
+</main>
+<footer><p><a href="https://github.com/groromario77-collab/ARAAMA-Universal-HMI-Dashboard">Projekt na GitHubu</a> · <a href="https://github.com/groromario77-collab/ARAAMA-Universal-HMI-Dashboard/issues">Nahlásit problém se zařízením nebo připojením</a></p></footer>
+</body>
+</html>

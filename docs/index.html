@@ -4,32 +4,62 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>ARAAMA — Android dashboard for MQTT, Home Assistant and Modbus</title>
-<meta name="description" content="Build an Android tablet dashboard for ESP32 sensors, MQTT, Home Assistant and Modbus meters. Plot readings, track relay states and control devices from one screen.">
+<meta name="description" content="Build an Android tablet dashboard for ESP32 sensors, MQTT, Home Assistant and Modbus meters. Download the full-featured release or the lighter 0.1.5 for small MQTT panels.">
 <link rel="canonical" href="https://groromario77-collab.github.io/ARAAMA-Universal-HMI-Dashboard/">
-<meta property="og:title" content="ARAAMA — Universal HMI Dashboard for Android">
-<meta property="og:description" content="Build an Android tablet dashboard for ESP32 sensors, MQTT, Home Assistant and Modbus meters. Plot readings, track relay states and control devices from one screen.">
-<meta property="og:image" content="https://raw.githubusercontent.com/groromario77-collab/ARAAMA-Universal-HMI-Dashboard/df6d8b613c68800453d1d92a6505d6f9eeb0ee4c/examples/01-neon-dashboard.jpg">
+<link rel="alternate" hreflang="en" href="https://groromario77-collab.github.io/ARAAMA-Universal-HMI-Dashboard/">
+<link rel="alternate" hreflang="ru" href="https://groromario77-collab.github.io/ARAAMA-Universal-HMI-Dashboard/ru/">
+<link rel="alternate" hreflang="cs" href="https://groromario77-collab.github.io/ARAAMA-Universal-HMI-Dashboard/cs/">
+<link rel="alternate" hreflang="x-default" href="https://groromario77-collab.github.io/ARAAMA-Universal-HMI-Dashboard/">
+<meta property="og:title" content="ARAAMA — Android dashboard for MQTT, Home Assistant and Modbus">
+<meta property="og:description" content="Build an Android tablet dashboard for ESP32 sensors, MQTT, Home Assistant and Modbus meters. Download the full-featured release or the lighter 0.1.5 for small MQTT panels.">
 <meta property="og:url" content="https://groromario77-collab.github.io/ARAAMA-Universal-HMI-Dashboard/">
-<style>
-:root{color-scheme:dark;font:1rem/1.55 "Segoe UI",system-ui,sans-serif;color:#ebf5f4;background:#08181e}
-body{max-width:62rem;margin:auto;padding:clamp(1.25rem,5vw,4rem)}
-header{display:grid;grid-template-columns:1fr minmax(13rem,30%);align-items:center;gap:3rem}
-h1{font-size:clamp(3rem,9vw,6rem);line-height:1;margin:0}
-h2{line-height:1.2;margin-top:2rem}p,li{max-width:64ch}
-a{color:#80e7e3;text-underline-offset:.18em}img{display:block;width:100%;height:auto;border-radius:.65rem}
-.button{display:inline-block;padding:.65rem 1rem;background:#87e8df;color:#082023;border-radius:.4rem;font-weight:650;text-decoration:none}
-section,footer{border-top:1px solid #31515b;margin-top:2rem}
-@media(max-width:40rem){header{grid-template-columns:1fr;gap:1.2rem}header img{max-width:17rem}}
-</style>
+<meta property="og:image" content="https://raw.githubusercontent.com/groromario77-collab/ARAAMA-Universal-HMI-Dashboard/df6d8b613c68800453d1d92a6505d6f9eeb0ee4c/examples/01-neon-dashboard.jpg">
+<link rel="stylesheet" href="./style.css">
 </head>
-<body><main><header><div><h1>ARAAMA</h1>
-<h2>One Android tablet for your sensors, meters and switches</h2>
-<p>Build a dashboard that puts an ESP32 temperature sensor, a Home Assistant switch and a Modbus power meter side by side. Trace each reading to its source and see where each control sends its command.</p>
-<p><a class="button" href="https://github.com/groromario77-collab/ARAAMA-Universal-HMI-Dashboard/releases/download/v0.1.10/ARAAMA-0.1.10-101-release.apk">Download APK · 0.1.10</a></p>
-<p>Android 8.0 or newer · Free · About 110 MiB</p>
-<p><a href="https://github.com/groromario77-collab/ARAAMA-Universal-HMI-Dashboard/releases/tag/v0.1.10">Release notes</a> · <a href="https://github.com/groromario77-collab/ARAAMA-Universal-HMI-Dashboard/tree/main/examples">Screenshot gallery</a></p></div>
-<a href="https://github.com/groromario77-collab/ARAAMA-Universal-HMI-Dashboard/tree/main/examples"><img src="https://raw.githubusercontent.com/groromario77-collab/ARAAMA-Universal-HMI-Dashboard/df6d8b613c68800453d1d92a6505d6f9eeb0ee4c/examples/01-neon-dashboard.jpg" width="800" height="1280" alt="Tablet showing a climate sensor, weather, electricity meters, switches and a temperature trend"></a></header>
-<section><h2>From an MQTT message to a temperature chart</h2><p>Connect the tablet to your MQTT broker and let your ESP32 publish a reading. In MQTT search, choose the topic and the temperature field from its JSON payload. Bind a gauge to that field, enable history and open a trend to see how the room changes over time.</p></section>
-<section><h2>Bring Home Assistant and Modbus onto the same panel</h2><p>Import a room's entities from Home Assistant. To add a meter, connect through Modbus TCP or an RTU-over-TCP gateway and select the power register from the meter's manual. HTTP/REST, WebSocket and Socket.IO sources can also supply readings.</p></section>
-<section><h2>Installation and illustrated guides</h2><p>Open the APK on your tablet. If you are updating an existing panel, export your project first. For a small MQTT setup, the <a href="https://github.com/groromario77-collab/ARAAMA-Universal-HMI-Dashboard/releases/tag/v0.1.5">39 MiB version 0.1.5</a> is also available.</p><p>Read the PDF guide in <a href="https://github.com/groromario77-collab/ARAAMA-Universal-HMI-Dashboard/releases/download/v0.1.10/ARAAMA-User-Guide-EN.pdf">English</a>, <a href="https://github.com/groromario77-collab/ARAAMA-Universal-HMI-Dashboard/releases/download/v0.1.10/ARAAMA-User-Guide-RU.pdf">Russian</a> or <a href="https://github.com/groromario77-collab/ARAAMA-Universal-HMI-Dashboard/releases/download/v0.1.10/ARAAMA-User-Guide-CS.pdf">Czech</a>.</p></section>
-</main><footer><p><a href="https://github.com/groromario77-collab/ARAAMA-Universal-HMI-Dashboard">Project on GitHub</a> · <a href="https://github.com/groromario77-collab/ARAAMA-Universal-HMI-Dashboard/issues">Report a device or connection issue</a></p></footer></body></html>
+<body>
+<nav aria-label="Language">
+  <details class="languages">
+    <summary>Language · English</summary>
+    <ul>
+      <li><a href="./" lang="en" hreflang="en" aria-current="page">English</a></li>
+      <li><a href="./ru/" lang="ru" hreflang="ru">Русский</a></li>
+      <li><a href="./cs/" lang="cs" hreflang="cs">Čeština</a></li>
+    </ul>
+  </details>
+</nav>
+<main>
+<header>
+  <div>
+    <h1>ARAAMA</h1>
+    <h2>One Android tablet for your sensors, meters and switches</h2>
+    <p>Put an ESP32 temperature sensor, a Home Assistant switch and a Modbus power meter on one dashboard. Trace each reading to its source and see where each control sends its command.</p>
+    <p>Free · Android 8.0 or newer</p>
+    <div class="downloads">
+      <article>
+        <h3>Lightweight version · 0.1.5</h3>
+        <p>For a few MQTT sensors, a chart and a relay switch.</p>
+        <a class="button" href="https://github.com/groromario77-collab/ARAAMA-Universal-HMI-Dashboard/releases/download/v0.1.5/ARAAMA-0.1.5.apk">Download APK · 39 MiB</a>
+        <a href="https://github.com/groromario77-collab/ARAAMA-Universal-HMI-Dashboard/releases/tag/v0.1.5">Release notes</a>
+      </article>
+      <article>
+        <h3>Latest release · 0.1.10</h3>
+        <p>Adds Modbus, WebSocket and Socket.IO, with separate command and state bindings.</p>
+        <a class="button" href="https://github.com/groromario77-collab/ARAAMA-Universal-HMI-Dashboard/releases/download/v0.1.10/ARAAMA-0.1.10-101-release.apk">Download APK · 110 MiB</a>
+        <a href="https://github.com/groromario77-collab/ARAAMA-Universal-HMI-Dashboard/releases/tag/v0.1.10">Release notes</a>
+      </article>
+    </div>
+    <p><a href="https://github.com/groromario77-collab/ARAAMA-Universal-HMI-Dashboard/tree/main/examples">Screenshot gallery</a></p>
+  </div>
+  <a href="https://github.com/groromario77-collab/ARAAMA-Universal-HMI-Dashboard/tree/main/examples"><img src="https://raw.githubusercontent.com/groromario77-collab/ARAAMA-Universal-HMI-Dashboard/df6d8b613c68800453d1d92a6505d6f9eeb0ee4c/examples/01-neon-dashboard.jpg" width="800" height="1280" alt="Tablet showing room climate, weather, voltage, current, switches and a temperature chart"></a>
+</header>
+<section><h2>From an MQTT message to a temperature chart</h2><p>Connect the tablet to your MQTT broker and let your ESP32 publish a reading. In MQTT search, select the topic and the temperature field from its JSON payload. Bind a gauge to that field and enable history to chart the readings over time.</p></section>
+<section><h2>Home Assistant and Modbus on the same panel</h2><p>Import a room’s entities from Home Assistant. To add a meter, connect through Modbus TCP or an RTU-over-TCP gateway. Select the power register from the manual for your meter. HTTP/REST, WebSocket and Socket.IO sources can also supply readings.</p></section>
+<section>
+  <h2>Installation and illustrated guides</h2><p>Open the APK on your Android device. Before updating an existing panel, export your project. Build 101 of version 0.1.10 can be installed over 0.1.5.</p>
+  <p><a href="https://github.com/groromario77-collab/ARAAMA-Universal-HMI-Dashboard/releases/download/v0.1.10/ARAAMA-User-Guide-EN.pdf">English guide for 0.1.10 (PDF)</a>
+  · <a lang="ru" href="https://github.com/groromario77-collab/ARAAMA-Universal-HMI-Dashboard/releases/download/v0.1.10/ARAAMA-User-Guide-RU.pdf">Русский (PDF)</a> · <a lang="cs" href="https://github.com/groromario77-collab/ARAAMA-Universal-HMI-Dashboard/releases/download/v0.1.10/ARAAMA-User-Guide-CS.pdf">Čeština (PDF)</a></p>
+</section>
+</main>
+<footer><p><a href="https://github.com/groromario77-collab/ARAAMA-Universal-HMI-Dashboard">Project on GitHub</a> · <a href="https://github.com/groromario77-collab/ARAAMA-Universal-HMI-Dashboard/issues">Report a device or connection issue</a></p></footer>
+</body>
+</html>
