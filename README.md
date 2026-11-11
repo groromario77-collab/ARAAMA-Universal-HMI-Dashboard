@@ -6,10 +6,10 @@ Build a tablet panel for your ESP32 sensors, Home Assistant entities and Modbus 
 
 Free app for Android 8.0 or newer. Illustrated PDF guides in [English](https://github.com/groromario77-collab/ARAAMA-Universal-HMI-Dashboard/releases/download/v0.1.10/ARAAMA-User-Guide-EN.pdf), [Russian](https://github.com/groromario77-collab/ARAAMA-Universal-HMI-Dashboard/releases/download/v0.1.10/ARAAMA-User-Guide-RU.pdf) and [Czech](https://github.com/groromario77-collab/ARAAMA-Universal-HMI-Dashboard/releases/download/v0.1.10/ARAAMA-User-Guide-CS.pdf).
 
-<a href="examples/README.md"><img src="examples/01-neon-dashboard.jpg" width="300" alt="Android tablet with room temperature, humidity, voltage, current, switches and temperature history"></a>
-<a href="examples/README.md"><img src="examples/11-elements-readings-controls.jpg" width="300" alt="Card picker with a gauge, trend chart, numeric input and dimmer"></a>
+<a href="examples/README.md"><img src="docs/screens/01-neon-dashboard.jpg" width="300" alt="Android tablet with room temperature, humidity, voltage, current, switches and temperature history"></a>
+<a href="examples/README.md"><img src="docs/screens/11-elements-readings-controls.jpg" width="300" alt="Card picker with a gauge, trend chart, numeric input and dimmer"></a>
 
-[Explore all 14 screenshots](examples/README.md), including seven themes for the same layout, chart history and card settings.
+[Explore all 14 screenshots](https://groromario77-collab.github.io/ARAAMA-Universal-HMI-Dashboard/gallery/), including seven themes for the same layout, chart history and card settings.
 
 ## Connect a data source
 

@@ -13,7 +13,7 @@
 <meta property="og:title" content="ARAAMA — панель Android для MQTT, Home Assistant и Modbus">
 <meta property="og:description" content="Выведите датчики ESP32, сущности Home Assistant и показания счётчика Modbus на один планшет. Для небольшой панели MQTT доступна облегчённая версия 0.1.5.">
 <meta property="og:url" content="https://groromario77-collab.github.io/ARAAMA-Universal-HMI-Dashboard/ru/">
-<meta property="og:image" content="https://raw.githubusercontent.com/groromario77-collab/ARAAMA-Universal-HMI-Dashboard/df6d8b613c68800453d1d92a6505d6f9eeb0ee4c/examples/01-neon-dashboard.jpg">
+<meta property="og:image" content="https://groromario77-collab.github.io/ARAAMA-Universal-HMI-Dashboard/screens/01-neon-dashboard.jpg">
 <link rel="stylesheet" href="../style.css">
 </head>
 <body>
@@ -48,9 +48,9 @@
         <a href="https://github.com/groromario77-collab/ARAAMA-Universal-HMI-Dashboard/releases/tag/v0.1.10">Что изменилось</a>
       </article>
     </div>
-    <p><a href="https://github.com/groromario77-collab/ARAAMA-Universal-HMI-Dashboard/tree/main/examples">Примеры экранов</a></p>
+    <p><a href="gallery/">Примеры экранов</a></p>
   </div>
-  <a href="https://github.com/groromario77-collab/ARAAMA-Universal-HMI-Dashboard/tree/main/examples"><img src="https://raw.githubusercontent.com/groromario77-collab/ARAAMA-Universal-HMI-Dashboard/df6d8b613c68800453d1d92a6505d6f9eeb0ee4c/examples/01-neon-dashboard.jpg" width="800" height="1280" alt="Панель на планшете с показаниями климата, погодой, напряжением, током, выключателями и графиком температуры"></a>
+  <a class="dashboard-preview" href="gallery/"><img src="../screens/01-neon-dashboard.jpg" width="800" height="1112" alt="Панель на планшете с показаниями климата, погодой, напряжением, током, выключателями и графиком температуры"></a>
 </header>
 <section><h2>Практикумы с датчиками ESP32</h2><ul><li><a href="labs/room-air/">Комнатный климат на планшете · DHT22</a></li><li><a href="labs/window-barometer/">Барометр на подоконнике · BMP280</a></li><li><a href="labs/aquarium/">Аквариум на планшете: температура воды и циклы нагрева</a></li></ul></section>
 <section><h2>От сообщения MQTT до графика температуры</h2><p>Подключите планшет к MQTT-брокеру и дождитесь сообщения от ESP32. В разделе «Поиск MQTT» выберите топик и поле температуры в сообщении JSON. Привяжите поле к шкале и включите запись истории, чтобы увидеть, как меняется температура.</p></section>

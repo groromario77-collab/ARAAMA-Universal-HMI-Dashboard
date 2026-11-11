@@ -13,7 +13,7 @@
 <meta property="og:title" content="ARAAMA — panel pro Android s podporou MQTT, Home Assistant a Modbus">
 <meta property="og:description" content="Zobrazte údaje ze senzorů ESP32, systému Home Assistant a měřidel Modbus na jednom tabletu. Pro menší MQTT panely je k dispozici odlehčená verze 0.1.5.">
 <meta property="og:url" content="https://groromario77-collab.github.io/ARAAMA-Universal-HMI-Dashboard/cs/">
-<meta property="og:image" content="https://raw.githubusercontent.com/groromario77-collab/ARAAMA-Universal-HMI-Dashboard/df6d8b613c68800453d1d92a6505d6f9eeb0ee4c/examples/01-neon-dashboard.jpg">
+<meta property="og:image" content="https://groromario77-collab.github.io/ARAAMA-Universal-HMI-Dashboard/screens/01-neon-dashboard.jpg">
 <link rel="stylesheet" href="../style.css">
 </head>
 <body>
@@ -48,9 +48,9 @@
         <a href="https://github.com/groromario77-collab/ARAAMA-Universal-HMI-Dashboard/releases/tag/v0.1.10">Přehled změn</a>
       </article>
     </div>
-    <p><a href="https://github.com/groromario77-collab/ARAAMA-Universal-HMI-Dashboard/tree/main/examples">Ukázky obrazovek</a></p>
+    <p><a href="gallery/">Ukázky obrazovek</a></p>
   </div>
-  <a href="https://github.com/groromario77-collab/ARAAMA-Universal-HMI-Dashboard/tree/main/examples"><img src="https://raw.githubusercontent.com/groromario77-collab/ARAAMA-Universal-HMI-Dashboard/df6d8b613c68800453d1d92a6505d6f9eeb0ee4c/examples/01-neon-dashboard.jpg" width="800" height="1280" alt="Panel na tabletu s údaji o teplotě v místnosti, počasí, napětí a proudu, s vypínači a grafem teploty"></a>
+  <a class="dashboard-preview" href="gallery/"><img src="../screens/01-neon-dashboard.jpg" width="800" height="1112" alt="Panel na tabletu s údaji o teplotě v místnosti, počasí, napětí a proudu, s vypínači a grafem teploty"></a>
 </header>
 <section><h2>Dílny se senzory ESP32</h2><ul><li><a href="labs/room-air/">Teplota a vlhkost v místnosti na tabletu · DHT22</a></li><li><a href="labs/window-barometer/">Barometr na parapetu · BMP280</a></li><li><a href="labs/aquarium/">Teplota vody a spínání topení v akváriu na tabletu</a></li></ul></section>
 <section><h2>Od MQTT zprávy ke grafu teploty</h2><p>Připojte tablet k MQTT brokeru a počkejte na zprávu z ESP32. Ve vyhledávání MQTT vyberte téma a v jeho JSON zprávě pole s teplotou. Přiřaďte je k ukazateli a zapněte záznam historie. V grafu pak uvidíte průběh teploty.</p></section>

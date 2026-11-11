@@ -7,6 +7,8 @@
   --muted: #b2c9e2;
   --ice: #71d7ff;
   --electric: #45baff;
+  --lit-edge: #427f9d;
+  --panel-glow: 0 0 .55rem #40d8ff26, 0 .15rem 1.6rem #157cce28;
   font: 1rem/1.55 "Segoe UI", system-ui, sans-serif;
   color: var(--ink);
   background: var(--night);
@@ -57,15 +59,35 @@ a { color: var(--ice); text-underline-offset: .18em; }
 a:hover { color: #b4ecff; }
 :focus-visible { outline: 3px solid var(--ice); outline-offset: 3px; }
 img { display: block; width: 100%; height: auto; border-radius: .65rem; }
-.downloads { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .75rem; }
+.dashboard-preview {
+  display: block;
+  border-radius: .65rem;
+}
+.dashboard-preview, .capture-pair img, figure img[src$="panel.webp"], .screen-grid img {
+  box-shadow: 0 0 0 1px var(--lit-edge), var(--panel-glow);
+}
+.dashboard-preview:hover, .screen-grid a:hover img { box-shadow: 0 0 0 1px var(--ice), var(--panel-glow); }
+.gallery-nav { justify-content: space-between; align-items: center; gap: .75rem; }
+.gallery h1 { font-size: clamp(2.1rem, 5vw, 3.5rem); line-height: 1.12; }
+.screen-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 17rem), 1fr));
+  gap: 1.75rem 1.25rem;
+}
+.screen-grid figure { margin: 0; }
+.screen-grid a { display: block; border-radius: .65rem; }
+.screen-grid figcaption { margin-top: .6rem; }
+.downloads { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; }
 article {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   padding: 1rem;
-  border: 1px solid var(--edge);
+  border: 1px solid var(--lit-edge);
   border-radius: .6rem;
   background: var(--surface);
+  background-image: radial-gradient(ellipse at top left, #2bc5ff12, transparent 70%);
+  box-shadow: var(--panel-glow);
 }
 article p { margin: .55rem 0 1rem; }
 .button {
@@ -85,7 +107,7 @@ main figcaption { color: var(--muted); }
 main pre { background: var(--surface); border-inline-start: 3px solid var(--electric); border-radius: .25rem; }
 @media (max-width: 48rem) {
   header { grid-template-columns: 1fr; gap: 1rem; }
-  header img { max-width: 18rem; }
+  .dashboard-preview { width: min(100%, 22rem); justify-self: center; }
 }
 @media (max-width: 34rem) {
   .downloads { grid-template-columns: 1fr; }
