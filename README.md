@@ -11,6 +11,14 @@ Free app for Android 8.0 or newer. Illustrated PDF guides in [English](https://g
 
 [Explore all 14 screenshots](https://groromario77-collab.github.io/ARAAMA-Universal-HMI-Dashboard/gallery/), including seven themes for the same layout, chart history and card settings.
 
+## Try a dashboard with simulated MQTT readings
+
+Each workshop includes a ready-to-import Android panel and a Python generator. Connect both to the same MQTT broker to follow the readings on your tablet.
+
+- [Room climate with an ESP32 and DHT22](https://groromario77-collab.github.io/ARAAMA-Universal-HMI-Dashboard/labs/room-air/) — plot room temperature and humidity. Use the generator or wire a DHT22 and upload the included Arduino sketch.
+- [Window barometer with a BMP280](https://groromario77-collab.github.io/ARAAMA-Universal-HMI-Dashboard/labs/window-barometer/) — track air pressure and temperature over time. The workshop includes the ESP32 wiring diagram and sketch.
+- [Aquarium temperature and heater cycles](https://groromario77-collab.github.io/ARAAMA-Universal-HMI-Dashboard/labs/aquarium/) — compare the water temperature curve with the heater's on/off history. You can run the whole exercise without a tank.
+
 ## Connect a data source
 
 | Source | What you can do |

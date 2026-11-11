@@ -9,8 +9,8 @@
   --electric: #45baff;
   --lit-edge: #427f9d;
   --panel-glow:
-    -.35rem .25rem 1.65rem .35rem rgb(29 195 255 / 20%),
-    .45rem .8rem 3.25rem .7rem rgb(23 126 255 / 26%);
+    -.35rem .25rem 1.65rem .35rem rgb(29 195 255 / 20.2%),
+    .45rem .8rem 3.25rem .7rem rgb(23 126 255 / 26.26%);
   font: 1rem/1.55 "Segoe UI", system-ui, sans-serif;
   color: var(--ink);
   background: var(--night);
