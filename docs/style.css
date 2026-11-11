@@ -1,30 +1,88 @@
 :root {
   color-scheme: dark;
+  --night: #041121;
+  --surface: #0d2540;
+  --edge: #305575;
+  --ink: #eaf4ff;
+  --muted: #b2c9e2;
+  --ice: #71d7ff;
+  --electric: #45baff;
   font: 1rem/1.55 "Segoe UI", system-ui, sans-serif;
-  color: #ebf5f4;
-  background: #08181e;
+  color: var(--ink);
+  background: var(--night);
+  background-image: radial-gradient(ellipse min(66rem, 100vw) 38rem at 32% 0, #0d3158 0%, transparent 85%);
+  background-repeat: no-repeat;
 }
 body { max-width: 66rem; margin: auto; padding: clamp(1.25rem, 4vw, 3rem); }
 nav { display: flex; justify-content: flex-end; margin-bottom: 1.5rem; }
 .languages { position: relative; }
-summary { padding: .5rem 1rem; border: 1px solid #536e75; border-radius: .4rem; cursor: pointer; }
-.languages ul { position: absolute; right: 0; z-index: 1; min-width: 100%; box-sizing: border-box; margin: .25rem 0; padding: .35rem; list-style: none; border: 1px solid #536e75; border-radius: .4rem; background: #10282f; }
+summary {
+  padding: .5rem 1rem;
+  border: 1px solid var(--edge);
+  border-radius: .4rem;
+  background: var(--surface);
+  cursor: pointer;
+}
+summary:hover, .languages[open] summary { border-color: var(--ice); }
+.languages ul {
+  position: absolute;
+  right: 0;
+  z-index: 1;
+  min-width: 100%;
+  box-sizing: border-box;
+  margin: .25rem 0;
+  padding: .35rem;
+  list-style: none;
+  border: 1px solid var(--edge);
+  border-radius: .4rem;
+  background: var(--surface);
+  box-shadow: 0 .5rem 1.5rem #020b17aa;
+}
 .languages a { display: block; padding: .5rem .75rem; }
-.languages [aria-current] { color: white; font-weight: 650; }
+.languages [aria-current] { color: var(--ink); font-weight: 650; }
 header { display: grid; grid-template-columns: minmax(0, 1fr) minmax(13rem, 30%); align-items: center; gap: 2rem; }
 h1 { font-size: clamp(3rem, 9vw, 6rem); line-height: 1; margin: 0; }
-.brand { display: flex; align-items: center; gap: .18em; font-size: clamp(2.4rem, 8vw, 5.8rem); }
-.brand img { flex: none; width: 1.12em; height: 1.12em; border-radius: .21em; }
+.brand { display: flex; align-items: center; gap: .18em; font-size: clamp(2.4rem, 8vw, 5.8rem); color: #e0f4ff; }
+.brand img {
+  flex: none;
+  width: 1.12em;
+  height: 1.12em;
+  border-radius: .21em;
+  box-shadow: 0 0 0 1px #3c7599, 0 0 .36em #30a6ff38;
+}
 h2 { line-height: 1.2; margin-top: 1.6rem; }
 h3 { font-size: 1.08rem; line-height: 1.3; margin: 0; }
 p { max-width: 64ch; }
-a { color: #80e7e3; text-underline-offset: .18em; }
+a { color: var(--ice); text-underline-offset: .18em; }
+a:hover { color: #b4ecff; }
+:focus-visible { outline: 3px solid var(--ice); outline-offset: 3px; }
 img { display: block; width: 100%; height: auto; border-radius: .65rem; }
 .downloads { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .75rem; }
-article { display: flex; flex-direction: column; align-items: flex-start; padding: 1rem; border: 1px solid #31515b; border-radius: .6rem; background: #10282f; }
+article {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 1rem;
+  border: 1px solid var(--edge);
+  border-radius: .6rem;
+  background: var(--surface);
+}
 article p { margin: .55rem 0 1rem; }
-.button { margin: auto 0 .5rem; display: inline-block; padding: .55rem .75rem; background: #87e8df; color: #082023; border-radius: .4rem; font-weight: 650; text-decoration: none; }
-section, footer { border-top: 1px solid #31515b; margin-top: 2rem; }
+.button {
+  display: inline-block;
+  margin: auto 0 .5rem;
+  padding: .55rem .75rem;
+  border-radius: .4rem;
+  background: var(--electric);
+  background-image: linear-gradient(120deg, #78e0ff, var(--electric));
+  color: var(--night);
+  font-weight: 650;
+  text-decoration: none;
+}
+.button:hover { background: #97e5ff; color: var(--night); }
+section, footer { border-top: 1px solid var(--edge); margin-top: 2rem; }
+main figcaption { color: var(--muted); }
+main pre { background: var(--surface); border-inline-start: 3px solid var(--electric); border-radius: .25rem; }
 @media (max-width: 48rem) {
   header { grid-template-columns: 1fr; gap: 1rem; }
   header img { max-width: 18rem; }
