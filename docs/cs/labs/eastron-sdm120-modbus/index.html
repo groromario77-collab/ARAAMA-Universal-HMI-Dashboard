@@ -10,9 +10,111 @@
 <link rel="alternate" hreflang="cs" href="https://groromario77-collab.github.io/ARAAMA-Universal-HMI-Dashboard/cs/labs/eastron-sdm120-modbus/">
 <link rel="alternate" hreflang="x-default" href="https://groromario77-collab.github.io/ARAAMA-Universal-HMI-Dashboard/labs/eastron-sdm120-modbus/">
 <link rel="stylesheet" href="../../../style.css?v=halo-22">
-<style>main{max-width:50rem;margin:auto}h1{font-size:clamp(2.3rem,6vw,4rem);line-height:1.08}figure{margin:1.5rem 0}figcaption{margin:.6rem 0;color:#bed2d4}pre{overflow:auto;padding:1rem;background:#10282f}code{overflow-wrap:anywhere}main img{box-shadow:0 0 0 1px var(--lit-edge),var(--panel-glow);max-width:44rem}nav{justify-content:space-between;align-items:center}li > figure{margin:1rem 0 1.5rem} main li{margin-block:.8rem} main ol{padding-inline-start:1.6rem}</style>
+<style>main{max-width:50rem;margin:auto}h1{font-size:clamp(2.3rem,6vw,4rem);line-height:1.08}figure{margin:1.5rem 0}figcaption{margin:.6rem 0;color:#bed2d4}pre{overflow:auto;padding:1rem;background:#10282f}code{overflow-wrap:anywhere}main img{box-shadow:0 0 0 1px var(--lit-edge),var(--panel-glow);max-width:44rem}nav{justify-content:space-between;align-items:center}li > figure{margin:1rem 0 1.5rem} main li{margin-block:.8rem} main ol{padding-inline-start:1.6rem}main figure a{display:block;width:fit-content;max-width:100%}main figure img{width:auto;max-width:min(100%,44rem);height:auto}main figcaption{max-width:44rem}main h2{margin-top:2.5rem;line-height:1.24}main p{line-height:1.55}main .workshop-table{overflow-x:auto}main table{width:100%;border-collapse:collapse}main th,main td{padding:.6rem;text-align:start;vertical-align:top;border-bottom:1px solid #315063}main th{color:#cbf1ff}main a:focus-visible{outline:2px solid #7ddfff;outline-offset:3px}</style>
 </head>
 <body><nav><a href="../../">Hlavní stránka ARAAMA</a><details class="languages"><summary>Jazyk · Čeština</summary><ul><li><a href="../../../labs/eastron-sdm120-modbus/" lang="en" hreflang="en">English</a></li><li><a href="../../../ru/labs/eastron-sdm120-modbus/" lang="ru" hreflang="ru">Русский</a></li><li><a href="../../../cs/labs/eastron-sdm120-modbus/" lang="cs" hreflang="cs" aria-current="page">Čeština</a></li></ul></details></nav>
-<main><h1>Jak zobrazit činný výkon z elektroměru Eastron na tabletu</h1>
-<p>Vedle teploty z Home Assistantu se na panel hodí i okamžitý příkon domu. V tomto příkladu použijeme elektroměr Eastron SDM120-Modbus s rozhraním RS-485, nastavenou síťovou bránu a aplikaci ARAAMA 0.1.10.</p>
-<h2>Nastavení panelu</h2><ol><li><p>Připojte tablet k síti brány a do aplikace zadejte její IP adresu a port. Pokud brána převádí požadavky Modbus TCP na RTU, zvolte Modbus TCP. Pokud jen přenáší nezměněné rámce RTU, zvolte RTU přes TCP. Do pole Unit ID zadejte adresu elektroměru. Brána i elektroměr musí mít na RS-485 stejnou přenosovou rychlost a paritu.</p></li><li><p>Vytvořte tag <em>Činný výkon</em>. V tabulce výrobce má číslo 30013 a počáteční adresu 0x000C. Do pole s adresováním od nuly zadejte <strong>12</strong>. Vyberte vstupní registry (funkce 04), typ Float32 a pořadí ABCD, pokud brána zachovává pořadí bajtů. Hodnota ve wattech zabírá dva registry. Násobitel nastavte na 1 a posun na 0. <a href="https://www.eastroneurope.com/images/uploads/products/protocol/SDM120-MODBUS_Protocol.pdf#page=5">Mapa registrů Eastron, str. 5</a></p><figure><img width="789" height="691" src="../../../labs/files/settings/modbus-power-cs.webp" alt="Nastavení činného výkonu v aplikaci ARAAMA. Vstupní registr 12, Float32, ABCD, jednotka W."></figure></li><li><p>Přiřaďte tag číselné kartě. Na displeji elektroměru vyberte činný výkon a při stálém odběru porovnejte hodnoty. Například 0,72 kW na displeji odpovídá přibližně 720 W na tabletu. <a href="https://github.com/groromario77-collab/ARAAMA-Universal-HMI-Dashboard/releases/tag/v0.1.10">ARAAMA 0.1.10 a příručky</a></p></li></ol></main></body></html>
+<main><h1>Činný výkon elektroměru Eastron SDM120 na tabletu</h1>
+<p>Na tabletu chci vidět, kolik wattů právě odebírá zátěž. SDM120-Modbus komunikuje přes RS-485 a tablet je ve Wi-Fi. Obě strany propojí síťová brána. V tomto cvičení přečteme jednu veličinu, činný výkon. Celý postup si můžete vyzkoušet i s cvičným serverem na počítači.</p>
+<p><a href="#source">Zdroj dat</a> · <a href="#network">Připojení brány</a> · <a href="#register">Nastavení registru</a> · <a href="#card">Číselný displej</a> · <a href="#result">Kontrola údaje</a></p>
+<h2 id="source">1. Vyberte zdroj měření</h2>
+<p><strong>S elektroměrem.</strong> Potřebujete ARAAMA 0.1.10, nainstalovaný SDM120-Modbus, bránu Ethernet nebo Wi-Fi ↔ RS-485 a přístup k nastavení brány. Zjistěte její síťovou adresu, port, formát přenosu a adresu elektroměru na sběrnici (<strong>Unit ID</strong>). Přenosová rychlost, parita a počet stop bitů se na straně RS-485 musí shodovat. Brána musí být z tabletu dostupná po síti.</p>
+<p><strong>S počítačem.</strong> <a href="../../../labs/files/SDM120/ARAAMA-SDM120.zip">Stáhněte si cvičný elektroměr a hotový panel</a>. Archiv rozbalte na počítači s Pythonem 3. Ve složce se souborem <code>simulate_meter.py</code> spusťte příkaz níže. Za <code>192.168.1.20</code> dosaďte <strong>lokální adresu tohoto počítače</strong>. Tablet připojte ke stejné síti.</p>
+<pre><code>python simulate_meter.py --bind 192.168.1.20 --port 1502 --watts 720
+</code></pre>
+<p>Terminál nechte otevřený. Server odpovídá na čtení přes Modbus TCP pro Unit ID <strong>1</strong>. Pro jiný údaj ukončete server pomocí Ctrl+C a spusťte jej s <code>--watts 350</code>. Chcete-li použít hotový displej, nejprve v <strong>Nastavení → Projekty</strong> exportujte aktuální projekt a otevřete přiložený <code>panel.json</code>. Pro ruční sestavení začněte na prázdné cvičné obrazovce. <a href="https://github.com/groromario77-collab/ARAAMA-Universal-HMI-Dashboard/releases/tag/v0.1.10">ARAAMA 0.1.10 a příručky</a></p>
+<h2 id="network">2. Nastavte připojení k bráně</h2>
+<p>V <strong>Nastavení → Síť</strong> vyberte připojení <strong>SDM120</strong> z projektu. Při ručním nastavení zvolte <strong>+ Připojení</strong>, zadejte <strong>SDM120</strong> a jako protokol vyberte <strong>Modbus TCP</strong>. Formát přenosu nastavte podle brány.</p>
+<div class="workshop-table"><table>
+<thead>
+<tr>
+<th>Pole připojení</th>
+<th>Cvičný server</th>
+<th>Skutečná brána</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Formát brány</td>
+<td>Modbus TCP (MBAP)</td>
+<td>MBAP pro převod TCP na RTU. Pro transparentní sériový most zvolte Modbus RTU přes TCP (RS-485)</td>
+</tr>
+<tr>
+<td>IP nebo název</td>
+<td>Adresa počítače z příkazu výše</td>
+<td>Síťová adresa brány</td>
+</tr>
+<tr>
+<td>Port</td>
+<td>1502</td>
+<td>Port nastavený v bráně, u MBAP často 502</td>
+</tr>
+<tr>
+<td>Unit ID</td>
+<td>1</td>
+<td>Adresa elektroměru na RS-485</td>
+</tr>
+<tr>
+<td>Prodleva mezi dotazy</td>
+<td>3 s</td>
+<td>Pro tento pokus 3 s</td>
+</tr>
+<tr>
+<td>Profil / časový limit</td>
+<td>Běžné registry / 5000 ms</td>
+<td>Pro první pokus běžné registry / 5000 ms</td>
+</tr>
+</tbody>
+</table></div>
+<figure><a href="../../../labs/files/steps/sdm-network-cs.webp"><img src="../../../labs/files/steps/sdm-network-cs.webp" width="692" height="577" loading="lazy" decoding="async" alt="Příklad nastavení brány MBAP na portu 502. Ukázkovou adresu 192.0.2.20 nahraďte vlastní. Pro Python server zadejte adresu počítače a port 1502."></a><figcaption>Příklad nastavení brány MBAP na portu 502. Ukázkovou adresu 192.0.2.20 nahraďte vlastní. Pro Python server zadejte adresu počítače a port 1502.</figcaption></figure>
+
+<p>Stiskněte <strong>Uložit připojení</strong>. Síťová adresa určuje bránu, zatímco Unit ID vybírá přístroj na sběrnici za ní. Výchozí limit 125 registrů na jeden dotaz zde vyhovuje. Jeden údaj o výkonu zabírá dva sousední registry.</p>
+<h2 id="register">3. Vytvořte tag pro činný výkon</h2>
+<p>Otevřete <strong>Nastavení → Tagy → + Tag</strong>. Zadejte název <strong>Active power</strong>, připojení <strong>SDM120</strong> a přístup pouze pro čtení. V hotovém panelu otevřete existující tag <strong>Active power</strong>. V části pro čtení nastavte:</p>
+<div class="workshop-table"><table>
+<thead>
+<tr>
+<th>Pole</th>
+<th>Hodnota</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Oblast paměti</td>
+<td>Input, pouze čtení (funkce 04)</td>
+</tr>
+<tr>
+<td>Adresa v paketu počítaná od nuly</td>
+<td>12</td>
+</tr>
+<tr>
+<td>Typ registru</td>
+<td>Float32, dva registry</td>
+</tr>
+<tr>
+<td>Pořadí bajtů</td>
+<td>ABCD pro původní pořadí Eastron</td>
+</tr>
+<tr>
+<td>Násobek / posun</td>
+<td>1 / 0</td>
+</tr>
+<tr>
+<td>Jednotka / zastarání</td>
+<td>W / 30 s</td>
+</tr>
+</tbody>
+</table></div>
+<p>V mapě tohoto modelu má řádek <strong>30013 — Active power</strong> počáteční adresu <strong>0x000C</strong>, tedy desítkově <strong>12</strong>. ARAAMA očekává adresu v paketu. Zkontrolujte výsledný zápis <code>input/12/float32/ABCD</code> a zvolte <strong>Uložit tag</strong>. <a href="https://www.eastroneurope.com/images/uploads/products/protocol/SDM120-MODBUS_Protocol.pdf#page=5">Mapa registrů Eastron, strana 5</a></p>
+<figure><a href="../../../labs/files/steps/sdm-tag-cs.webp"><img src="../../../labs/files/steps/sdm-tag-cs.webp" width="692" height="636" loading="lazy" decoding="async" alt="Tag Active power čte na vstupní adrese 12 hodnotu Float32 ve wattech."></a><figcaption>Tag Active power čte na vstupní adrese 12 hodnotu Float32 ve wattech.</figcaption></figure>
+
+<h2 id="card">4. Přidejte číselný displej</h2>
+<p>U uloženého tagu <strong>Active power</strong> otevřete <strong>Použití na obrazovkách</strong>. Zvolte <strong>Číselný displej → Vytvořit kartu tohoto tagu</strong>. V parametrech karty ponechte název <strong>Active power</strong>, jednotku <strong>W</strong> a nastavte <strong>0</strong> desetinných míst. Číselný displej nepotřebuje hranice stupnice. Hotový projekt už má k tagu přiřazený jeden displej.</p>
+<figure><a href="../../../labs/files/steps/sdm-pick-cs.webp"><img src="../../../labs/files/steps/sdm-pick-cs.webp" width="692" height="87" loading="lazy" decoding="async" alt="Vytvoření číselného displeje pro činný výkon elektroměru."></a><figcaption>Vytvoření číselného displeje pro činný výkon elektroměru.</figcaption></figure>
+
+<figure><a href="../../../labs/files/steps/sdm-format-cs.webp"><img src="../../../labs/files/steps/sdm-format-cs.webp" width="1150" height="333" loading="lazy" decoding="async" alt="Karta zobrazuje výkon v celých wattech."></a><figcaption>Karta zobrazuje výkon v celých wattech.</figcaption></figure>
+
+<h2 id="result">5. Porovnejte údaj</h2>
+<p>Spusťte panel a vyčkejte na další dotaz. S parametrem <code>--watts 720</code> má karta ukázat <strong>720 W</strong>. Když server znovu spustíte s <code>--watts 350</code>, stejná karta po obnovení spojení ukáže <strong>350 W</strong>.</p>
+<figure><a href="../../../labs/files/steps/sdm-result-cs.webp"><img src="../../../labs/files/steps/sdm-result-cs.webp" width="752" height="230" loading="lazy" decoding="async" alt="Číselný displej ARAAMA 0.1.10. Rozhraní dostalo údaj 720 W dekódovaný z odpovědi cvičného Modbus TCP serveru."></a><figcaption>Číselný displej ARAAMA 0.1.10. Rozhraní dostalo údaj 720 W dekódovaný z odpovědi cvičného Modbus TCP serveru.</figcaption></figure>
+
+<p>Na skutečném elektroměru zvolte <strong>činný výkon</strong> a při ustálené zátěži porovnejte displeje. Například <strong>0,72 kW</strong> na elektroměru odpovídá <strong>720 W</strong> na tabletu. Je-li karta prázdná, zkontrolujte IP adresu, port a Unit ID. Při chybě adresy ověřte <strong>Input, 12, dva registry</strong>. Jestliže má hodnota nesmyslný řád, zkontrolujte <strong>Float32</strong>, pořadí bajtů brány a násobek tagu.</p></main></body></html>

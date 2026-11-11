@@ -10,10 +10,93 @@
 <link rel="alternate" hreflang="cs" href="https://groromario77-collab.github.io/ARAAMA-Universal-HMI-Dashboard/cs/labs/mqtt-dashboard-tags/">
 <link rel="alternate" hreflang="x-default" href="https://groromario77-collab.github.io/ARAAMA-Universal-HMI-Dashboard/labs/mqtt-dashboard-tags/">
 <link rel="stylesheet" href="../../../style.css?v=halo-22">
-<style>main{max-width:50rem;margin:auto}h1{font-size:clamp(2.3rem,6vw,4rem);line-height:1.08}figure{margin:1.5rem 0}figcaption{margin:.6rem 0;color:#bed2d4}pre{overflow:auto;padding:1rem;background:#10282f}code{overflow-wrap:anywhere}main img{box-shadow:0 0 0 1px var(--lit-edge),var(--panel-glow);max-width:44rem}nav{justify-content:space-between;align-items:center}li > figure{margin:1rem 0 1.5rem} main li{margin-block:.8rem} main ol{padding-inline-start:1.6rem}</style>
+<style>main{max-width:50rem;margin:auto}h1{font-size:clamp(2.3rem,6vw,4rem);line-height:1.08}figure{margin:1.5rem 0}figcaption{margin:.6rem 0;color:#bed2d4}pre{overflow:auto;padding:1rem;background:#10282f}code{overflow-wrap:anywhere}main img{box-shadow:0 0 0 1px var(--lit-edge),var(--panel-glow);max-width:44rem}nav{justify-content:space-between;align-items:center}li > figure{margin:1rem 0 1.5rem} main li{margin-block:.8rem} main ol{padding-inline-start:1.6rem}main figure a{display:block;width:fit-content;max-width:100%}main figure img{width:auto;max-width:min(100%,44rem);height:auto}main figcaption{max-width:44rem}main h2{margin-top:2.5rem;line-height:1.24}main p{line-height:1.55}main .workshop-table{overflow-x:auto}main table{width:100%;border-collapse:collapse}main th,main td{padding:.6rem;text-align:start;vertical-align:top;border-bottom:1px solid #315063}main th{color:#cbf1ff}main a:focus-visible{outline:2px solid #7ddfff;outline-offset:3px}</style>
 </head>
 <body><nav><a href="../../">Hlavní stránka ARAAMA</a><details class="languages"><summary>Jazyk · Čeština</summary><ul><li><a href="../../../labs/mqtt-dashboard-tags/" lang="en" hreflang="en">English</a></li><li><a href="../../../ru/labs/mqtt-dashboard-tags/" lang="ru" hreflang="ru">Русский</a></li><li><a href="../../../cs/labs/mqtt-dashboard-tags/" lang="cs" hreflang="cs" aria-current="page">Čeština</a></li></ul></details></nav>
-<main><h1>Čtyři karty na tabletu z jediného MQTT tématu</h1>
-<p>U pokojového čidla se hodí dvě stupnice, jedna pro teplotu a druhá pro vlhkost, a pod každou graf za posledních pár hodin. Když se téma a cesta k poli nastavují u každé karty zvlášť, stačí jediný překlep a graf zůstane prázdný.</p>
-<p>V příkladu RoomAir poslal generátor do místního brokeru na téma <code>lab/room-air/state</code> zprávu <code>{"temperature_c":22.0,"humidity_pct":49.6}</code>. Další zpráva obsahovala stále 22,0 °C, ale vlhkost klesla na 49,4 %. Na dvojici zpráv si lze snadno ověřit obě vazby.</p>
-<h2>Nastavení panelu</h2><ol><li><p>Spusťte generátor, otevřete vyhledávání MQTT a vyberte <code>lab/room-air/state</code>. Zvolte pole <code>$.temperature_c</code> a uložte vazbu jako tag teploty s jednotkou °C. Pole <code>$.humidity_pct</code> uložte jako tag vlhkosti v procentech.</p><figure><img width="789" height="703" src="../../../labs/files/settings/mqtt-room-cs.webp" alt="Nastavení tagu teploty RoomAir. Téma lab/room-air/state a pole $.temperature_c."></figure></li><li><p>U obou tagů zapněte historii. Stupnici teploty i jejímu grafu přiřaďte stejný tag teploty. Totéž udělejte pro vlhkost.</p></li><li><p>Hotový projekt zaznamenává změny. Po druhé zprávě má vlhkost klesnout z 49,6 % na 49,4 %, zatímco teplota zůstane na 22,0 °C. V historii teploty proto další bod zatím nečekejte. V archivu je připravený panel i generátor, příklad si tedy můžete vyzkoušet bez ESP32. <a href="https://groromario77-collab.github.io/ARAAMA-Universal-HMI-Dashboard/cs/labs/room-air/">Návod RoomAir a soubory ke stažení</a></p></li></ol></main></body></html>
+<main><h1>Jedno MQTT téma, dva ukazatele a dva grafy</h1>
+<p>Na pokojovém panelu chci vidět aktuální teplotu a vlhkost a pod nimi průběh za poslední půlhodinu. Čidlo posílá obě čísla v jedné zprávě. V ARAAMA k tomu stačí dva tagy. Každý čte vlastní pole JSON, má vlastní jednotku a ukládá vlastní historii.</p>
+<p><a href="#network">Připojení</a> · <a href="#temperature">Teplota</a> · <a href="#humidity">Vlhkost</a> · <a href="#result">Kontrola čtyř karet</a></p>
+<h2 id="network">1. Připojení tabletu k brokeru</h2>
+<p>Připravte si ARAAMA 0.1.10 na Androidu, počítač s Pythonem 3 a klientem Mosquitto <code>mosquitto_pub</code> a MQTT broker dostupný z obou zařízení. Pro tento pokus dodá hodnoty generátor. <a href="../../../labs/files/ARAAMA-ESP32-labs.zip">Stáhnout generátor a panel RoomAir</a> · <a href="../room-air/">Zapojení ESP32 a DHT22</a></p>
+<p>Pokud chcete otevřít hotový panel, v <strong>Nastavení → Projekty</strong> nejprve exportujte svůj otevřený projekt. Poté z rozbaleného archivu otevřete <code>RoomAir/panel.json</code>. Obsahuje všechny čtyři karty. Pro ruční sestavení začněte na prázdné obrazovce cvičného projektu.</p>
+<p>Otevřete <strong>Nastavení → Síť</strong>. V hotovém projektu vyberte <strong>Workshop broker</strong>, při ručním nastavení zvolte <strong>+ Připojení</strong> a pojmenujte ho <strong>Workshop broker</strong>. Protokol je <strong>MQTT 3.1.1</strong>. Místo <code>broker.example</code> zadejte adresu vlastního brokeru bez <code>mqtt://</code>. V ukázce používáme port <strong>1883</strong> a vypnuté TLS. Pro svůj broker nastavte jeho port, TLS a přihlašovací údaje. V ukázce je opakování připojení <strong>5 s</strong>, Keepalive <strong>30 s</strong> a časový limit <strong>5000 ms</strong>. Zvolte <strong>Uložit připojení</strong>.</p>
+<figure><a href="../../../labs/files/steps/room-network-cs.webp"><img src="../../../labs/files/steps/room-network-cs.webp" width="692" height="716" loading="lazy" decoding="async" alt="Nastavení brokeru. Adresu broker.example z hotového projektu nahraďte vlastní adresou."></a><figcaption>Nastavení brokeru. Adresu broker.example z hotového projektu nahraďte vlastní adresou.</figcaption></figure>
+
+<p>Rozbalte archiv a ve složce se souborem <code>simulate.py</code> spusťte příkaz níže. Ukázkovou IP adresu nahraďte adresou stejného brokeru jako na tabletu. Bez parametru <code>--host</code> generátor pouze vypisuje zprávy v terminálu.</p>
+<pre><code>python simulate.py room --host 192.168.1.20 --port 1883
+</code></pre>
+<p>Každých pět sekund přijde zpráva do tématu <code>lab/room-air/state</code>. V nastavení otevřete vyhledávání MQTT, vyberte <strong>Workshop broker</strong>, režim běžných témat a filtr <code>lab/room-air/#</code>. Spusťte hledání a rozbalte větev <strong>lab → room-air → state</strong>. Uvidíte číselná pole <code>temperature_c</code> a <code>humidity_pct</code>. Znak <code>#</code> patří do vyhledávacího filtru. V obou tazích použijte celou adresu tématu.</p>
+<figure><a href="../../../labs/files/steps/room-scan-cs.webp"><img src="../../../labs/files/steps/room-scan-cs.webp" width="320" height="95" loading="lazy" decoding="async" alt="Filtr omezí hledání na větev cvičného čidla."></a><figcaption>Filtr omezí hledání na větev cvičného čidla.</figcaption></figure>
+
+<figure><a href="../../../labs/files/steps/room-fields-cs.webp"><img src="../../../labs/files/steps/room-fields-cs.webp" width="931" height="986" loading="lazy" decoding="async" alt="Vyhledávání MQTT rozebere ukázkovou zprávu na dvě hodnoty, $.temperature_c = 22 a $.humidity_pct = 49.6."></a><figcaption>Vyhledávání MQTT rozebere ukázkovou zprávu na dvě hodnoty, $.temperature_c = 22 a $.humidity_pct = 49.6.</figcaption></figure>
+
+<p>V podrobnostech nalezeného pole můžete zkopírovat jeho cestu JSON a vložit ji do formuláře tagu. Hodí se to zvláště u delších cest ze skutečných čidel. Anglické názvy tagů v návodu odpovídají souboru RoomAir.</p>
+<h2 id="temperature">2. Teplota vzduchu</h2>
+<p><strong>Tag.</strong> Otevřete <strong>Nastavení → Tagy → + Tag</strong>. Jako název zadejte <strong>Air temperature</strong>, připojení <strong>Workshop broker</strong>, typ proměnné <strong>Float</strong>, přístup pouze pro čtení a jednotku <strong>°C</strong>. V části pro příjem dat zadejte téma <code>lab/room-air/state</code>, formát <strong>JSON</strong> a cestu <code>$.temperature_c</code>. Hodnota už je ve stupních Celsia. Nastavte násobek <strong>1</strong>, posun <strong>0</strong> a zastarání dat <strong>30 s</strong>. Stiskněte <strong>Uložit tag</strong>.</p>
+<figure><a href="../../../labs/files/steps/temperature-tag-cs.webp"><img src="../../../labs/files/steps/temperature-tag-cs.webp" width="692" height="646" loading="lazy" decoding="async" alt="Vazba teploty s cestou $.temperature_c."></a><figcaption>Vazba teploty s cestou $.temperature_c.</figcaption></figure>
+
+<p><strong>Karta 1 — ukazatel teploty.</strong> U uloženého tagu otevřete <strong>Použití na obrazovkách</strong>. Vyberte <strong>Analogový přístroj</strong> a stiskněte <strong>Vytvořit kartu tohoto tagu</strong>. V parametrech nové karty ponechte název <strong>Air temperature</strong>. V nastavení stupnice zadejte Min <strong>0</strong>, Max <strong>40</strong>, jednotku <strong>°C</strong> a <strong>1</strong> desetinné místo. Pokud se zobrazí tlačítko pro použití Min/Max, potvrďte rozsah. Při přijetí hodnoty 22 ukáže přístroj 22 °C.</p>
+<figure><a href="../../../labs/files/steps/temperature-pick-cs.webp"><img src="../../../labs/files/steps/temperature-pick-cs.webp" width="692" height="87" loading="lazy" decoding="async" alt="Vytvoření analogového přístroje z tagu Air temperature."></a><figcaption>Vytvoření analogového přístroje z tagu Air temperature.</figcaption></figure>
+
+<figure><a href="../../../labs/files/steps/temperature-scale-cs.webp"><img src="../../../labs/files/steps/temperature-scale-cs.webp" width="1150" height="333" loading="lazy" decoding="async" alt="Rozsah a přesnost teplotní stupnice."></a><figcaption>Rozsah a přesnost teplotní stupnice.</figcaption></figure>
+
+<p>Pro vzhled podle hotového panelu vyberte v parametrech přístroje motiv obrazovky <strong>Neon</strong>, azurovou barvu karty a ciferník <strong>Oblouk s přechodem</strong>. Motiv platí pro celou obrazovku, barva a ciferník pro tuto kartu.</p>
+<figure><a href="../../../labs/files/steps/temperature-face-cs.webp"><img src="../../../labs/files/steps/temperature-face-cs.webp" width="1113" height="1049" loading="lazy" decoding="async" alt="U teplotního přístroje je vybraný Oblouk s přechodem."></a><figcaption>U teplotního přístroje je vybraný Oblouk s přechodem.</figcaption></figure>
+
+<p><strong>Karta 2 — graf teploty.</strong> Vraťte se do <strong>Tagy → Air temperature → Použití na obrazovkách</strong>. Vyberte <strong>Trend → Vytvořit kartu tohoto tagu</strong>. V parametrech karty zadejte název <strong>Air temperature history</strong>. Otevřete <strong>Období a záznam</strong>, zvolte vlastní období a zadejte <strong>0,5 hodiny</strong> (30 minut). Vyberte záznam <strong>Při změně</strong>, zapněte uchování mezi spuštěními Androidu a nastavení uložte.</p>
+<figure><a href="../../../labs/files/steps/temperature-trend-pick-cs.webp"><img src="../../../labs/files/steps/temperature-trend-pick-cs.webp" width="692" height="87" loading="lazy" decoding="async" alt="Ukazatel i graf teploty používají tag Air temperature."></a><figcaption>Ukazatel i graf teploty používají tag Air temperature.</figcaption></figure>
+
+<figure><a href="../../../labs/files/steps/temperature-window-cs.webp"><img src="../../../labs/files/steps/temperature-window-cs.webp" width="1035" height="612" loading="lazy" decoding="async" alt="Graf Air temperature history zobrazuje poslední půlhodinu."></a><figcaption>Graf Air temperature history zobrazuje poslední půlhodinu.</figcaption></figure>
+
+<p><strong>Historie teploty.</strong> V <strong>Tagy → Historie měření</strong> vyberte nahoře <strong>Air temperature</strong>. Zapněte záznam historie, zvolte <strong>Při změně</strong>, dobu <strong>24 hodin</strong> a nejvýše <strong>500 bodů</strong>. Nastavení uložte. Limity platí pro historii tagu v relaci. Časový výřez půl hodiny náleží jednotlivému grafu.</p>
+<figure><a href="../../../labs/files/steps/temperature-history-cs.webp"><img src="../../../labs/files/steps/temperature-history-cs.webp" width="807" height="780" loading="lazy" decoding="async" alt="Při opakovaném přijetí stejné teploty nový bod nevznikne."></a><figcaption>Při opakovaném přijetí stejné teploty nový bod nevznikne.</figcaption></figure>
+
+<h2 id="humidity">3. Relativní vlhkost</h2>
+<p><strong>Tag.</strong> Zvolte <strong>Nastavení → Tagy → + Tag</strong>. Název je <strong>Relative humidity</strong>, připojení <strong>Workshop broker</strong>, typ <strong>Float</strong>, přístup pouze pro čtení a jednotka <strong>%</strong>. Zadejte téma <code>lab/room-air/state</code>, formát <strong>JSON</strong> a cestu <strong><code>$.humidity_pct</code></strong>. Generátor posílá vlhkost přímo v procentech. Zpráva s hodnotou 49,6 má na kartě zobrazit 49,6 %. Ponechte násobek <strong>1</strong>, posun <strong>0</strong>, zastarání <strong>30 s</strong> a stiskněte <strong>Uložit tag</strong>.</p>
+<figure><a href="../../../labs/files/steps/humidity-tag-cs.webp"><img src="../../../labs/files/steps/humidity-tag-cs.webp" width="692" height="646" loading="lazy" decoding="async" alt="Pole $.humidity_pct vybírá vlhkost ze stejné zprávy jako teplota."></a><figcaption>Pole $.humidity_pct vybírá vlhkost ze stejné zprávy jako teplota.</figcaption></figure>
+
+<p><strong>Karta 3 — ukazatel vlhkosti.</strong> U tagu <strong>Relative humidity</strong> otevřete <strong>Použití na obrazovkách</strong>. Vyberte <strong>Analogový přístroj → Vytvořit kartu tohoto tagu</strong>. V parametrech karty ponechte název <strong>Relative humidity</strong>. Nastavte stupnici na Min <strong>0</strong>, Max <strong>100</strong>, jednotku <strong>%</strong> a <strong>1</strong> desetinné místo. Pokud aplikace nabídne použití Min/Max, rozsah potvrďte. Při vlhkosti kolem 50 % se ručička dostane doprostřed stupnice.</p>
+<figure><a href="../../../labs/files/steps/humidity-pick-cs.webp"><img src="../../../labs/files/steps/humidity-pick-cs.webp" width="692" height="87" loading="lazy" decoding="async" alt="Z tagu Relative humidity vznikne ukazatel vlhkosti."></a><figcaption>Z tagu Relative humidity vznikne ukazatel vlhkosti.</figcaption></figure>
+
+<figure><a href="../../../labs/files/steps/humidity-scale-cs.webp"><img src="../../../labs/files/steps/humidity-scale-cs.webp" width="1150" height="333" loading="lazy" decoding="async" alt="Stupnice vlhkosti pokrývá 0–100 %."></a><figcaption>Stupnice vlhkosti pokrývá 0–100 %.</figcaption></figure>
+
+<p>U karty vlhkosti vyberte zelenou barvu a ciferník <strong>Azurová ručička</strong>. Na hotové obrazovce zabírá teplota levou polovinu horní řady a vlhkost pravou. V režimu nastavení přetáhněte karty na místo a tažením za dolní roh upravte jejich velikost. Pod ukazatele umístěte přes celou šířku graf teploty a pod něj graf vlhkosti.</p>
+<figure><a href="../../../labs/files/steps/humidity-face-cs.webp"><img src="../../../labs/files/steps/humidity-face-cs.webp" width="1113" height="1049" loading="lazy" decoding="async" alt="Vybraná Azurová ručička. Náhled v nabídce má ukázkovou hodnotu, při spuštění se zobrazí přijaté měření."></a><figcaption>Vybraná Azurová ručička. Náhled v nabídce má ukázkovou hodnotu, při spuštění se zobrazí přijaté měření.</figcaption></figure>
+
+<p><strong>Karta 4 — graf vlhkosti.</strong> Vraťte se do <strong>Tagy → Relative humidity → Použití na obrazovkách</strong>. Vyberte <strong>Trend</strong> a stiskněte <strong>Vytvořit kartu tohoto tagu</strong>. Graf pojmenujte <strong>Relative humidity history</strong>. V jeho parametrech otevřete <strong>Období a záznam</strong>, zvolte vlastní období <strong>0,5 hodiny</strong>, záznam <strong>Při změně</strong>, zapněte uchování mezi spuštěními Androidu a uložte.</p>
+<figure><a href="../../../labs/files/steps/humidity-trend-pick-cs.webp"><img src="../../../labs/files/steps/humidity-trend-pick-cs.webp" width="692" height="87" loading="lazy" decoding="async" alt="Druhý trend vytvořte z tagu Relative humidity."></a><figcaption>Druhý trend vytvořte z tagu Relative humidity.</figcaption></figure>
+
+<figure><a href="../../../labs/files/steps/humidity-window-cs.webp"><img src="../../../labs/files/steps/humidity-window-cs.webp" width="1035" height="612" loading="lazy" decoding="async" alt="Období a záznam grafu Relative humidity history."></a><figcaption>Období a záznam grafu Relative humidity history.</figcaption></figure>
+
+<p><strong>Historie vlhkosti.</strong> V <strong>Tagy → Historie měření</strong> vyberte <strong>Relative humidity</strong>. Zapněte záznam, zvolte <strong>Při změně</strong>, dobu <strong>24 hodin</strong> a nejvýše <strong>500 bodů</strong>. Nastavení uložte. Změna vlhkosti se teď zaznamená i při stejné teplotě.</p>
+<figure><a href="../../../labs/files/steps/humidity-history-cs.webp"><img src="../../../labs/files/steps/humidity-history-cs.webp" width="807" height="780" loading="lazy" decoding="async" alt="Název nahoře určuje, že nastavujete záznam vlhkosti."></a><figcaption>Název nahoře určuje, že nastavujete záznam vlhkosti.</figcaption></figure>
+
+<h2 id="result">4. Kontrola všech čtyř karet</h2>
+<p>Spusťte panel. Porovnejte první dvě zprávy generátoru s ukazateli a počtem bodů v nové relaci.</p>
+<div class="workshop-table"><table>
+<thead>
+<tr>
+<th>Čas od spuštění</th>
+<th style="text-align: right;">Teplota</th>
+<th style="text-align: right;">Vlhkost</th>
+<th style="text-align: right;">Počet bodů teploty / vlhkosti</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0 s</td>
+<td style="text-align: right;">22,0 °C</td>
+<td style="text-align: right;">49,6 %</td>
+<td style="text-align: right;">1 / 1</td>
+</tr>
+<tr>
+<td>5 s</td>
+<td style="text-align: right;">22,0 °C</td>
+<td style="text-align: right;">49,4 %</td>
+<td style="text-align: right;">1 / 2</td>
+</tr>
+</tbody>
+</table></div>
+<figure><a href="../../../labs/files/steps/room-result-cs.webp"><img src="../../../labs/files/steps/room-result-cs.webp" width="1132" height="768" loading="lazy" decoding="async" alt="Panel RoomAir v rozhraní 0.1.10. Po půlhodině dat z generátoru ukazuje 21,4 °C a 51,3 %. Pod ukazateli je historie obou veličin."></a><figcaption>Panel RoomAir v rozhraní 0.1.10. Po půlhodině dat z generátoru ukazuje 21,4 °C a 51,3 %. Pod ukazateli je historie obou veličin.</figcaption></figure>
+
+<p>Při pořizování snímku prošlo rozhraním ve zrychleném čase 361 zpráv generátoru. Teplotní graf zaznamenal 91 bodů, graf vlhkosti 266. Ukazují obě stupnice 22? Zkontrolujte cestu JSON v tagu <strong>Relative humidity</strong>. Mění se vlhkost na stupnici, ale graf je prázdný? Zkontrolujte tag přiřazený grafu a záznam historie u <strong>Relative humidity</strong>. Pokud jsou prázdné obě stupnice, najděte nejprve čerstvou zprávu ve vyhledávání MQTT.</p></main></body></html>

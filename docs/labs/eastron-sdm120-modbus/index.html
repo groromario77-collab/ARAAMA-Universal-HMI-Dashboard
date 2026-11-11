@@ -10,9 +10,111 @@
 <link rel="alternate" hreflang="cs" href="https://groromario77-collab.github.io/ARAAMA-Universal-HMI-Dashboard/cs/labs/eastron-sdm120-modbus/">
 <link rel="alternate" hreflang="x-default" href="https://groromario77-collab.github.io/ARAAMA-Universal-HMI-Dashboard/labs/eastron-sdm120-modbus/">
 <link rel="stylesheet" href="../../style.css?v=halo-22">
-<style>main{max-width:50rem;margin:auto}h1{font-size:clamp(2.3rem,6vw,4rem);line-height:1.08}figure{margin:1.5rem 0}figcaption{margin:.6rem 0;color:#bed2d4}pre{overflow:auto;padding:1rem;background:#10282f}code{overflow-wrap:anywhere}main img{box-shadow:0 0 0 1px var(--lit-edge),var(--panel-glow);max-width:44rem}nav{justify-content:space-between;align-items:center}li > figure{margin:1rem 0 1.5rem} main li{margin-block:.8rem} main ol{padding-inline-start:1.6rem}</style>
+<style>main{max-width:50rem;margin:auto}h1{font-size:clamp(2.3rem,6vw,4rem);line-height:1.08}figure{margin:1.5rem 0}figcaption{margin:.6rem 0;color:#bed2d4}pre{overflow:auto;padding:1rem;background:#10282f}code{overflow-wrap:anywhere}main img{box-shadow:0 0 0 1px var(--lit-edge),var(--panel-glow);max-width:44rem}nav{justify-content:space-between;align-items:center}li > figure{margin:1rem 0 1.5rem} main li{margin-block:.8rem} main ol{padding-inline-start:1.6rem}main figure a{display:block;width:fit-content;max-width:100%}main figure img{width:auto;max-width:min(100%,44rem);height:auto}main figcaption{max-width:44rem}main h2{margin-top:2.5rem;line-height:1.24}main p{line-height:1.55}main .workshop-table{overflow-x:auto}main table{width:100%;border-collapse:collapse}main th,main td{padding:.6rem;text-align:start;vertical-align:top;border-bottom:1px solid #315063}main th{color:#cbf1ff}main a:focus-visible{outline:2px solid #7ddfff;outline-offset:3px}</style>
 </head>
 <body><nav><a href="../../">ARAAMA home</a><details class="languages"><summary>Language · English</summary><ul><li><a href="../../labs/eastron-sdm120-modbus/" lang="en" hreflang="en" aria-current="page">English</a></li><li><a href="../../ru/labs/eastron-sdm120-modbus/" lang="ru" hreflang="ru">Русский</a></li><li><a href="../../cs/labs/eastron-sdm120-modbus/" lang="cs" hreflang="cs">Čeština</a></li></ul></details></nav>
-<main><h1>Read an Eastron meter’s active power on an Android tablet</h1>
-<p>My dashboard already has a temperature card from Home Assistant. The next card can show how many watts the house is drawing. This example uses an Eastron SDM120-Modbus on RS-485, a configured network gateway and ARAAMA 0.1.10.</p>
-<h2>Set up the dashboard</h2><ol><li><p>Connect the tablet to the gateway’s network. Enter the gateway IP and port in ARAAMA. Choose Modbus TCP if the gateway translates TCP requests to RTU, or RTU over TCP if it forwards raw RTU frames. Use the meter’s address for the Unit ID. Match the gateway’s RS-485 baud rate and parity to the meter.</p></li><li><p>Create an <em>Active power</em> tag. Eastron lists it as 30013 and gives 0x000C as its starting address. Enter <strong>12</strong> in the zero-based address field. Select input registers (function 04), Float32 and ABCD byte order for a gateway that preserves the meter’s byte order. The reading occupies two registers and comes in watts. Use a multiplier of 1 and an offset of 0. <a href="https://www.eastroneurope.com/images/uploads/products/protocol/SDM120-MODBUS_Protocol.pdf#page=5">Eastron register map, page 5</a></p><figure><img width="789" height="691" src="../../labs/files/settings/modbus-power-en.webp" alt="ARAAMA active power tag. Input register 12, Float32, ABCD, unit W."></figure></li><li><p>Select this tag on a numeric card. Set the meter display to active power and compare readings under a steady load. For example, 0.72 kW on the meter corresponds to about 720 W on the tablet. <a href="https://github.com/groromario77-collab/ARAAMA-Universal-HMI-Dashboard/releases/tag/v0.1.10">ARAAMA 0.1.10 and user guides</a></p></li></ol></main></body></html>
+<main><h1>Read an Eastron SDM120 power meter on an Android tablet</h1>
+<p>I wanted to see the load in watts on a tablet. The SDM120-Modbus speaks RS-485, while the tablet is on Wi-Fi. A network gateway connects the two. This workshop reads one measurement, active power. You can also run the whole exercise with a practice server on a computer.</p>
+<p><a href="#source">Choose a source</a> · <a href="#network">Gateway connection</a> · <a href="#register">Register settings</a> · <a href="#card">Create the display</a> · <a href="#result">Check the reading</a></p>
+<h2 id="source">1. Choose a data source</h2>
+<p><strong>Using a meter.</strong> You need ARAAMA 0.1.10, an installed SDM120-Modbus, an Ethernet or Wi-Fi to RS-485 gateway, and access to its configuration. Look up the gateway's network address, listening port and framing mode, and the meter's bus address (<strong>Unit ID</strong>). Baud rate, parity and stop bits must match on the RS-485 side. The tablet needs network access to the gateway.</p>
+<p><strong>Using a computer.</strong> <a href="../files/SDM120/ARAAMA-SDM120.zip">Download the practice meter and finished panel</a>. Extract the archive on a computer with Python 3. In the directory containing <code>simulate_meter.py</code>, run the command below. Replace <code>192.168.1.20</code> with <strong>this computer's LAN address</strong> and connect the tablet to the same network.</p>
+<pre><code>python simulate_meter.py --bind 192.168.1.20 --port 1502 --watts 720
+</code></pre>
+<p>Keep the terminal open. The server answers Modbus TCP reads at Unit ID <strong>1</strong>. To test a different value, stop it with Ctrl+C and restart it with <code>--watts 350</code>. For the finished display, export your current project in <strong>Settings → Projects</strong>, then open the supplied <code>panel.json</code>. To build the display manually, start on an empty practice screen. <a href="https://github.com/groromario77-collab/ARAAMA-Universal-HMI-Dashboard/releases/tag/v0.1.10">ARAAMA 0.1.10 and manuals</a></p>
+<h2 id="network">2. Configure the network connection</h2>
+<p>In <strong>Settings → Network</strong>, select the imported <strong>SDM120</strong> connection. For a manual build, choose <strong>+ Connection</strong>, enter <strong>SDM120</strong> and select <strong>Modbus TCP</strong>. Set the gateway framing to match your equipment.</p>
+<div class="workshop-table"><table>
+<thead>
+<tr>
+<th>Connection field</th>
+<th>Practice server</th>
+<th>Physical gateway</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Gateway framing</td>
+<td>Modbus TCP (MBAP)</td>
+<td>MBAP for TCP-to-RTU conversion. Use Modbus RTU over TCP (RS-485) for a transparent serial bridge</td>
+</tr>
+<tr>
+<td>Host</td>
+<td>Computer address from the command above</td>
+<td>Gateway IP address or host name</td>
+</tr>
+<tr>
+<td>Port</td>
+<td>1502</td>
+<td>The port configured on the gateway, often 502 for MBAP</td>
+</tr>
+<tr>
+<td>Unit ID</td>
+<td>1</td>
+<td>Meter's RS-485 address</td>
+</tr>
+<tr>
+<td>Polling delay</td>
+<td>3 s</td>
+<td>3 s for this exercise</td>
+</tr>
+<tr>
+<td>Profile / timeout</td>
+<td>Generic registers / 5000 ms</td>
+<td>Generic registers / 5000 ms for an initial test</td>
+</tr>
+</tbody>
+</table></div>
+<figure><a href="../files/steps/sdm-network-en.webp"><img src="../files/steps/sdm-network-en.webp" width="692" height="577" loading="lazy" decoding="async" alt="Example MBAP gateway on port 502. Replace the example address 192.0.2.20. For the Python meter, use your computer&#x27;s address and port 1502."></a><figcaption>Example MBAP gateway on port 502. Replace the example address 192.0.2.20. For the Python meter, use your computer&#x27;s address and port 1502.</figcaption></figure>
+
+<p>Select <strong>Save connection</strong>. The host identifies the gateway. The Unit ID selects the meter behind it. The default maximum read size of 125 registers is sufficient here. One power reading occupies two adjacent registers.</p>
+<h2 id="register">3. Create the active power tag</h2>
+<p>Open <strong>Settings → Tags → + Tag</strong>. Enter <strong>Active power</strong> for the name, <strong>SDM120</strong> for the connection and <strong>Read only</strong> for access. In the imported panel, open the existing <strong>Active power</strong> tag. Fill in the read settings:</p>
+<div class="workshop-table"><table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Memory area</td>
+<td>Input, read only (function 04)</td>
+</tr>
+<tr>
+<td>Zero-based packet address</td>
+<td>12</td>
+</tr>
+<tr>
+<td>Register type</td>
+<td>Float32, two registers</td>
+</tr>
+<tr>
+<td>Byte order</td>
+<td>ABCD for Eastron's original byte order</td>
+</tr>
+<tr>
+<td>Multiplier / offset</td>
+<td>1 / 0</td>
+</tr>
+<tr>
+<td>Unit / stale timeout</td>
+<td>W / 30 s</td>
+</tr>
+</tbody>
+</table></div>
+<p>In this model's register map, <strong>30013 — Active power</strong> has starting address <strong>0x000C</strong>, decimal <strong>12</strong>. ARAAMA asks for the packet address. Check the resulting address string <code>input/12/float32/ABCD</code> and select <strong>Save tag</strong>. <a href="https://www.eastroneurope.com/images/uploads/products/protocol/SDM120-MODBUS_Protocol.pdf#page=5">Eastron register map, page 5</a></p>
+<figure><a href="../files/steps/sdm-tag-en.webp"><img src="../files/steps/sdm-tag-en.webp" width="692" height="636" loading="lazy" decoding="async" alt="Active power at input address 12, decoded as a Float32 reading in watts."></a><figcaption>Active power at input address 12, decoded as a Float32 reading in watts.</figcaption></figure>
+
+<h2 id="card">4. Create the digital display</h2>
+<p>In the saved <strong>Active power</strong> tag, open <strong>Used on screens</strong>. Select <strong>Digital display</strong>, then <strong>Create a card for this tag</strong>. Open the card parameters and use the title <strong>Active power</strong>, unit <strong>W</strong> and <strong>0</strong> decimal places. This card displays a number and needs no scale limits. The downloaded project already includes one display bound to the tag.</p>
+<figure><a href="../files/steps/sdm-pick-en.webp"><img src="../files/steps/sdm-pick-en.webp" width="692" height="87" loading="lazy" decoding="async" alt="Create a digital display for the meter&#x27;s active power tag."></a><figcaption>Create a digital display for the meter&#x27;s active power tag.</figcaption></figure>
+
+<figure><a href="../files/steps/sdm-format-en.webp"><img src="../files/steps/sdm-format-en.webp" width="1150" height="333" loading="lazy" decoding="async" alt="The display shows whole watts."></a><figcaption>The display shows whole watts.</figcaption></figure>
+
+<h2 id="result">5. Compare the reading</h2>
+<p>Select <strong>Run</strong> and allow a polling cycle. With <code>--watts 720</code>, the expected reading is <strong>720 W</strong>. Restart the practice server with <code>--watts 350</code>. Once the tablet reconnects, the same card should show <strong>350 W</strong>.</p>
+<figure><a href="../files/steps/sdm-result-en.webp"><img src="../files/steps/sdm-result-en.webp" width="752" height="230" loading="lazy" decoding="async" alt="Digital display in ARAAMA 0.1.10. The interface received the 720 W reading decoded from the practice Modbus TCP server&#x27;s response."></a><figcaption>Digital display in ARAAMA 0.1.10. The interface received the 720 W reading decoded from the practice Modbus TCP server&#x27;s response.</figcaption></figure>
+
+<p>For a physical meter, select <strong>active power</strong> on its display and compare the two readings under a steady load. For example, <strong>0.72 kW</strong> on the meter corresponds to <strong>720 W</strong> on the tablet. If the card is blank, check the IP address, port and Unit ID. If the device returns an address error, check <strong>Input, 12, two registers</strong>. If the magnitude is implausible, check <strong>Float32</strong>, the gateway's byte order and the tag multiplier.</p></main></body></html>

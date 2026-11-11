@@ -10,9 +10,111 @@
 <link rel="alternate" hreflang="cs" href="https://groromario77-collab.github.io/ARAAMA-Universal-HMI-Dashboard/cs/labs/eastron-sdm120-modbus/">
 <link rel="alternate" hreflang="x-default" href="https://groromario77-collab.github.io/ARAAMA-Universal-HMI-Dashboard/labs/eastron-sdm120-modbus/">
 <link rel="stylesheet" href="../../../style.css?v=halo-22">
-<style>main{max-width:50rem;margin:auto}h1{font-size:clamp(2.3rem,6vw,4rem);line-height:1.08}figure{margin:1.5rem 0}figcaption{margin:.6rem 0;color:#bed2d4}pre{overflow:auto;padding:1rem;background:#10282f}code{overflow-wrap:anywhere}main img{box-shadow:0 0 0 1px var(--lit-edge),var(--panel-glow);max-width:44rem}nav{justify-content:space-between;align-items:center}li > figure{margin:1rem 0 1.5rem} main li{margin-block:.8rem} main ol{padding-inline-start:1.6rem}</style>
+<style>main{max-width:50rem;margin:auto}h1{font-size:clamp(2.3rem,6vw,4rem);line-height:1.08}figure{margin:1.5rem 0}figcaption{margin:.6rem 0;color:#bed2d4}pre{overflow:auto;padding:1rem;background:#10282f}code{overflow-wrap:anywhere}main img{box-shadow:0 0 0 1px var(--lit-edge),var(--panel-glow);max-width:44rem}nav{justify-content:space-between;align-items:center}li > figure{margin:1rem 0 1.5rem} main li{margin-block:.8rem} main ol{padding-inline-start:1.6rem}main figure a{display:block;width:fit-content;max-width:100%}main figure img{width:auto;max-width:min(100%,44rem);height:auto}main figcaption{max-width:44rem}main h2{margin-top:2.5rem;line-height:1.24}main p{line-height:1.55}main .workshop-table{overflow-x:auto}main table{width:100%;border-collapse:collapse}main th,main td{padding:.6rem;text-align:start;vertical-align:top;border-bottom:1px solid #315063}main th{color:#cbf1ff}main a:focus-visible{outline:2px solid #7ddfff;outline-offset:3px}</style>
 </head>
 <body><nav><a href="../../">Главная ARAAMA</a><details class="languages"><summary>Язык · Русский</summary><ul><li><a href="../../../labs/eastron-sdm120-modbus/" lang="en" hreflang="en">English</a></li><li><a href="../../../ru/labs/eastron-sdm120-modbus/" lang="ru" hreflang="ru" aria-current="page">Русский</a></li><li><a href="../../../cs/labs/eastron-sdm120-modbus/" lang="cs" hreflang="cs">Čeština</a></li></ul></details></nav>
-<main><h1>Активная мощность счётчика Eastron на планшете</h1>
-<p>На экране уже есть температура из Home Assistant. Рядом хочется видеть, сколько ватт сейчас потребляет дом. Разберём подключение на примере Eastron SDM120-Modbus с интерфейсом RS-485. Понадобятся ARAAMA 0.1.10 и настроенный сетевой шлюз, к которому подключён счётчик.</p>
-<h2>Настройка панели</h2><ol><li><p>Подключите планшет к сети шлюза. В ARAAMA укажите IP и порт шлюза. Если шлюз преобразует Modbus TCP в RTU, выберите Modbus TCP. Если он прозрачно передаёт кадры RTU по сети, выберите RTU поверх TCP. В поле Unit ID укажите адрес самого счётчика. Скорость и чётность на стороне RS-485 должны совпадать у шлюза и счётчика.</p></li><li><p>Создайте тег «Активная мощность». В таблице Eastron строке 30013 соответствует начальный адрес 0x000C. В поле адреса с отсчётом от нуля введите <strong>12</strong>. Выберите входные регистры (функция 04), тип Float32 и порядок ABCD, если шлюз передаёт байты в исходном порядке. Одно показание занимает два регистра, единица — ватт. Множитель 1, смещение 0. <a href="https://www.eastroneurope.com/images/uploads/products/protocol/SDM120-MODBUS_Protocol.pdf#page=5">Карта регистров Eastron, стр. 5</a></p><figure><img width="789" height="693" src="../../../labs/files/settings/modbus-power-ru.webp" alt="Чтение активной мощности SDM120 в ARAAMA. Входной регистр 12, Float32, ABCD, единица W."></figure></li><li><p>Привяжите тег к числовой карточке и выведите на дисплей счётчика активную мощность. При ровной нагрузке сравните оба показания. Если дисплей показывает 0,72 кВт, на планшете ожидается около 720 Вт. Это пример пересчёта единиц. <a href="https://github.com/groromario77-collab/ARAAMA-Universal-HMI-Dashboard/releases/tag/v0.1.10">ARAAMA 0.1.10 и руководства</a></p></li></ol></main></body></html>
+<main><h1>Мощность счётчика Eastron SDM120 на планшете</h1>
+<p>На планшете хочется видеть, сколько ватт сейчас потребляет нагрузка. У SDM120-Modbus есть RS-485, а планшет находится в Wi-Fi. Между ними нужен сетевой шлюз. В этом опыте читаем одно показание — активную мощность. Для первого запуска можно заменить и шлюз, и счётчик учебным сервером на компьютере.</p>
+<p><a href="#source">Выбрать источник</a> · <a href="#network">Настроить сеть</a> · <a href="#register">Указать регистр</a> · <a href="#card">Создать табло</a> · <a href="#result">Проверить результат</a></p>
+<h2 id="source">1. Выбрать источник показаний</h2>
+<p><strong>Со счётчиком.</strong> Понадобятся ARAAMA 0.1.10, установленный SDM120-Modbus, шлюз Ethernet/Wi-Fi ↔ RS-485 и доступ к настройкам шлюза. Запишите его сетевой адрес, порт и формат обмена, а также адрес счётчика на шине (<strong>Unit ID</strong>). Скорость, чётность и стоп-биты на стороне RS-485 должны совпадать у шлюза и счётчика. Планшет должен видеть шлюз по сети.</p>
+<p><strong>Без оборудования.</strong> <a href="../../../labs/files/SDM120/ARAAMA-SDM120.zip">Скачайте учебный счётчик и готовую панель</a>. Распакуйте архив на компьютере с Python 3. Из папки с <code>simulate_meter.py</code> запустите команду ниже. Вместо <code>192.168.1.20</code> подставьте локальный IP <strong>этого компьютера</strong>. Подключите планшет к той же сети.</p>
+<pre><code>python simulate_meter.py --bind 192.168.1.20 --port 1502 --watts 720
+</code></pre>
+<p>Оставьте терминал открытым. Учебный сервер отвечает на чтение по Modbus TCP с Unit ID <strong>1</strong>. Для проверки другого значения остановите его клавишами Ctrl+C и запустите с <code>--watts 350</code>. Для просмотра готовой карточки сначала экспортируйте текущий проект в <strong>Настройки → Проекты</strong>, затем откройте <code>panel.json</code> из архива. Для сборки вручную начните с пустого учебного экрана. <a href="https://github.com/groromario77-collab/ARAAMA-Universal-HMI-Dashboard/releases/tag/v0.1.10">ARAAMA 0.1.10 и руководства</a></p>
+<h2 id="network">2. Сеть и шлюз</h2>
+<p>В <strong>Настройки → Сеть</strong> выберите подключение <strong>SDM120</strong> из проекта. При ручной сборке нажмите <strong>+ Подключение</strong>, введите <strong>SDM120</strong> и выберите протокол <strong>Modbus TCP</strong>. В поле формата шлюза укажите способ передачи, настроенный на вашем шлюзе.</p>
+<div class="workshop-table"><table>
+<thead>
+<tr>
+<th>Поле подключения</th>
+<th>Учебный сервер</th>
+<th>Физический шлюз</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Формат шлюза</td>
+<td>Modbus TCP (MBAP)</td>
+<td>MBAP при преобразовании TCP в RTU. Для прозрачного последовательного моста — Modbus RTU через TCP (RS-485)</td>
+</tr>
+<tr>
+<td>IP или имя устройства</td>
+<td>Адрес компьютера из команды запуска</td>
+<td>Сетевой адрес шлюза</td>
+</tr>
+<tr>
+<td>Порт</td>
+<td>1502</td>
+<td>Порт из настроек шлюза. Для MBAP часто используется 502</td>
+</tr>
+<tr>
+<td>Unit ID</td>
+<td>1</td>
+<td>Адрес счётчика на RS-485</td>
+</tr>
+<tr>
+<td>Пауза между опросами</td>
+<td>3 с</td>
+<td>3 с для этого примера</td>
+</tr>
+<tr>
+<td>Профиль / тайм-аут</td>
+<td>Обычные регистры / 5000 мс</td>
+<td>Обычные регистры / 5000 мс для первого опыта</td>
+</tr>
+</tbody>
+</table></div>
+<figure><a href="../../../labs/files/steps/sdm-network-ru.webp"><img src="../../../labs/files/steps/sdm-network-ru.webp" width="692" height="577" loading="lazy" decoding="async" alt="Пример подключения к шлюзу MBAP на порту 502. Замените учебный адрес 192.0.2.20. С Python-сервером укажите адрес своего компьютера и порт 1502."></a><figcaption>Пример подключения к шлюзу MBAP на порту 502. Замените учебный адрес 192.0.2.20. С Python-сервером укажите адрес своего компьютера и порт 1502.</figcaption></figure>
+
+<p>Нажмите <strong>Сохранить подключение</strong>. Один сетевой адрес определяет шлюз, а Unit ID выбирает прибор на шине за ним. В поле совместимости чтения достаточно оставить стандартный максимум 125 регистров. Одно показание мощности занимает два соседних регистра.</p>
+<h2 id="register">3. Завести тег активной мощности</h2>
+<p>Откройте <strong>Настройки → Теги → + Тег</strong>. Укажите название <strong>Active power</strong>, подключение <strong>SDM120</strong>, доступ <strong>Только чтение</strong>. В готовом проекте откройте уже существующий <strong>Active power</strong>. В разделе <strong>Что читаем</strong> заполните поля:</p>
+<div class="workshop-table"><table>
+<thead>
+<tr>
+<th>Поле</th>
+<th>Значение</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Область памяти</td>
+<td>Input · только чтение (функция 04)</td>
+</tr>
+<tr>
+<td>Адрес в пакете, начиная с 0</td>
+<td>12</td>
+</tr>
+<tr>
+<td>Тип регистра</td>
+<td>Float32 · два регистра</td>
+</tr>
+<tr>
+<td>Порядок байтов</td>
+<td>ABCD для исходного порядка Eastron</td>
+</tr>
+<tr>
+<td>Умножить / прибавить</td>
+<td>1 / 0</td>
+</tr>
+<tr>
+<td>Единица / устаревание</td>
+<td>W / 30 с</td>
+</tr>
+</tbody>
+</table></div>
+<p>В карте именно этой модели строка <strong>30013 — Active power</strong> содержит адрес <strong>0x000C</strong>, то есть <strong>12</strong>. В поле ARAAMA вводится адрес в пакете. После настройки проверьте строку <code>input/12/float32/ABCD</code> и нажмите <strong>Сохранить тег</strong>. <a href="https://www.eastroneurope.com/images/uploads/products/protocol/SDM120-MODBUS_Protocol.pdf#page=5">Карта регистров Eastron, стр. 5</a></p>
+<figure><a href="../../../labs/files/steps/sdm-tag-ru.webp"><img src="../../../labs/files/steps/sdm-tag-ru.webp" width="692" height="637" loading="lazy" decoding="async" alt="Тег Active power. По адресу 12 читается число Float32 в ваттах."></a><figcaption>Тег Active power. По адресу 12 читается число Float32 в ваттах.</figcaption></figure>
+
+<h2 id="card">4. Создать цифровое табло</h2>
+<p>В сохранённом теге <strong>Active power</strong> откройте <strong>Использование на экранах</strong>. В поле вида новой карточки выберите <strong>Цифровое табло</strong> и нажмите <strong>Создать карточку этого тега</strong>. Откройте параметры табло, оставьте название <strong>Active power</strong>, единицу <strong>W</strong> и <strong>0</strong> знаков после запятой. Для цифрового табло достаточно числа: границы шкалы не нужны. Если открыли готовый проект, одно табло уже связано с тегом.</p>
+<figure><a href="../../../labs/files/steps/sdm-pick-ru.webp"><img src="../../../labs/files/steps/sdm-pick-ru.webp" width="692" height="87" loading="lazy" decoding="async" alt="Создание цифрового табло из тега счётчика."></a><figcaption>Создание цифрового табло из тега счётчика.</figcaption></figure>
+
+<figure><a href="../../../labs/files/steps/sdm-format-ru.webp"><img src="../../../labs/files/steps/sdm-format-ru.webp" width="1150" height="333" loading="lazy" decoding="async" alt="Формат показания на карточке — целые ватты."></a><figcaption>Формат показания на карточке — целые ватты.</figcaption></figure>
+
+<h2 id="result">5. Сверить показание</h2>
+<p>Нажмите <strong>Запуск</strong> и дождитесь очередного опроса. При <code>--watts 720</code> ожидается <strong>720 W</strong>. Если перезапустить учебный сервер с <code>--watts 350</code>, число после восстановления соединения должно измениться на <strong>350 W</strong>.</p>
+<figure><a href="../../../labs/files/steps/sdm-result-ru.webp"><img src="../../../labs/files/steps/sdm-result-ru.webp" width="752" height="230" loading="lazy" decoding="async" alt="Цифровое табло ARAAMA 0.1.10. Для снимка интерфейсу передано значение 720 W, прочитанное из ответа учебного Modbus TCP-сервера."></a><figcaption>Цифровое табло ARAAMA 0.1.10. Для снимка интерфейсу передано значение 720 W, прочитанное из ответа учебного Modbus TCP-сервера.</figcaption></figure>
+
+<p>На физическом счётчике откройте показание <strong>активной мощности</strong> и сравните его с планшетом при ровной нагрузке. Например, <strong>0,72 кВт</strong> на дисплее соответствует <strong>720 Вт</strong>. Пустое табло — повод сначала проверить IP, порт и Unit ID. При ответе об ошибке адреса сверьте <strong>Input, 12, два регистра</strong>. Если приходит число совершенно другого порядка, проверьте <strong>Float32</strong>, порядок байтов шлюза и множитель тега.</p></main></body></html>

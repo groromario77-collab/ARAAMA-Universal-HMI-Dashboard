@@ -1,0 +1,217 @@
+{
+  "version": 22,
+  "name": "SDM120",
+  "theme": "futuristic",
+  "activePageId": "demo",
+  "connections": [
+    {
+      "id": "gateway",
+      "name": "SDM120",
+      "protocol": "modbus-tcp",
+      "host": "192.0.2.20",
+      "port": 502,
+      "modbusProfile": "generic",
+      "modbusFraming": "mbap",
+      "modbusUnitId": 1,
+      "modbusPollSeconds": 3,
+      "modbusMaxReadRegisters": 125,
+      "tls": false,
+      "url": "",
+      "timeoutMs": 5000,
+      "reconnectSeconds": 5,
+      "heartbeatSeconds": 30,
+      "credentialRef": ""
+    }
+  ],
+  "pages": [
+    {
+      "id": "demo",
+      "name": "SDM120",
+      "discoveryKey": "",
+      "theme": "futuristic",
+      "background": {
+        "image": "",
+        "fit": "cover"
+      },
+      "orientation": "auto",
+      "scale": "normal",
+      "zoom": 1,
+      "widgets": [
+        {
+          "id": "60182e8b-7f51-4daa-a5bb-42f95c3de9f4",
+          "type": "value",
+          "title": "Active power",
+          "tagId": "active_power",
+          "background": false,
+          "archive": false,
+          "x": 0,
+          "y": 0,
+          "w": 8,
+          "h": 4,
+          "binding": {
+            "connectionId": "gateway",
+            "topic": "input/12/float32/ABCD",
+            "format": "plain",
+            "path": "$",
+            "dataType": "float",
+            "on": "1",
+            "off": "0",
+            "scale": 1,
+            "offset": 0,
+            "staleSeconds": 30
+          },
+          "action": {
+            "topic": "",
+            "on": "1",
+            "off": "0",
+            "retain": false,
+            "qos": 0,
+            "confirmMs": 2000,
+            "method": "POST",
+            "coverPositionSteps": 100,
+            "body": "{{value}}",
+            "serviceOn": "turn_on",
+            "serviceOff": "turn_off",
+            "numericMode": "direct",
+            "outputType": "float"
+          },
+          "style": {
+            "accent": "cyan",
+            "icon": "Thermometer",
+            "iconOff": "Thermometer",
+            "iconOn": "Thermometer",
+            "highlight": true,
+            "rgbLayout": "expanded",
+            "labelOn": "",
+            "labelOff": ""
+          },
+          "io": {
+            "mode": "legacy",
+            "fields": {}
+          },
+          "rgb": {
+            "mode": "manual",
+            "cycle": false,
+            "startTime": "00:00",
+            "endTime": "00:00"
+          },
+          "range": {
+            "min": 0,
+            "max": 3000,
+            "step": 1,
+            "decimals": 0,
+            "unit": "W"
+          },
+          "button": {
+            "mode": "pulse",
+            "pulseMs": 350
+          },
+          "timer": {
+            "mode": "schedule",
+            "enabled": false,
+            "startEnabled": true,
+            "endEnabled": true,
+            "startTime": "08:00",
+            "endTime": "20:00",
+            "days": [
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+              7
+            ]
+          },
+          "content": {
+            "text": "Текст",
+            "image": "",
+            "fit": "contain",
+            "align": "center",
+            "size": 24
+          },
+          "options": [
+            {
+              "label": "Авто",
+              "value": "AUTO"
+            },
+            {
+              "label": "Ручной",
+              "value": "MANUAL"
+            },
+            {
+              "label": "Выключено",
+              "value": "OFF"
+            }
+          ],
+          "device": {
+            "temperature": "",
+            "setpoint": "",
+            "mode": ""
+          },
+          "history": {
+            "retentionHours": 24,
+            "maxSamples": 500
+          },
+          "trend": {
+            "windowHours": 24,
+            "scale": "auto",
+            "connectPoints": true,
+            "interpolation": "linear",
+            "binaryMode": "timeout"
+          }
+        }
+      ],
+      "groups": []
+    }
+  ],
+  "tags": [
+    {
+      "id": "active_power",
+      "name": "Active power",
+      "binding": {
+        "connectionId": "gateway",
+        "topic": "input/12/float32/ABCD",
+        "format": "plain",
+        "path": "$",
+        "dataType": "float",
+        "on": "1",
+        "off": "0",
+        "scale": 1,
+        "offset": 0,
+        "staleSeconds": 30
+      },
+      "action": {
+        "topic": "",
+        "on": "1",
+        "off": "0",
+        "retain": false,
+        "qos": 0,
+        "confirmMs": 2000,
+        "method": "POST",
+        "coverPositionSteps": 100,
+        "body": "{{value}}",
+        "serviceOn": "turn_on",
+        "serviceOff": "turn_off",
+        "numericMode": "direct",
+        "outputType": "float"
+      },
+      "access": "read",
+      "unit": "W",
+      "history": {
+        "enabled": true,
+        "mode": "change",
+        "intervalSeconds": 5,
+        "retentionHours": 24,
+        "maxSamples": 500
+      },
+      "alarm": {
+        "enabled": false,
+        "low": null,
+        "high": null,
+        "hysteresis": 0,
+        "severity": "warning"
+      }
+    }
+  ]
+}

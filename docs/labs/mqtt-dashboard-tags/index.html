@@ -10,10 +10,93 @@
 <link rel="alternate" hreflang="cs" href="https://groromario77-collab.github.io/ARAAMA-Universal-HMI-Dashboard/cs/labs/mqtt-dashboard-tags/">
 <link rel="alternate" hreflang="x-default" href="https://groromario77-collab.github.io/ARAAMA-Universal-HMI-Dashboard/labs/mqtt-dashboard-tags/">
 <link rel="stylesheet" href="../../style.css?v=halo-22">
-<style>main{max-width:50rem;margin:auto}h1{font-size:clamp(2.3rem,6vw,4rem);line-height:1.08}figure{margin:1.5rem 0}figcaption{margin:.6rem 0;color:#bed2d4}pre{overflow:auto;padding:1rem;background:#10282f}code{overflow-wrap:anywhere}main img{box-shadow:0 0 0 1px var(--lit-edge),var(--panel-glow);max-width:44rem}nav{justify-content:space-between;align-items:center}li > figure{margin:1rem 0 1.5rem} main li{margin-block:.8rem} main ol{padding-inline-start:1.6rem}</style>
+<style>main{max-width:50rem;margin:auto}h1{font-size:clamp(2.3rem,6vw,4rem);line-height:1.08}figure{margin:1.5rem 0}figcaption{margin:.6rem 0;color:#bed2d4}pre{overflow:auto;padding:1rem;background:#10282f}code{overflow-wrap:anywhere}main img{box-shadow:0 0 0 1px var(--lit-edge),var(--panel-glow);max-width:44rem}nav{justify-content:space-between;align-items:center}li > figure{margin:1rem 0 1.5rem} main li{margin-block:.8rem} main ol{padding-inline-start:1.6rem}main figure a{display:block;width:fit-content;max-width:100%}main figure img{width:auto;max-width:min(100%,44rem);height:auto}main figcaption{max-width:44rem}main h2{margin-top:2.5rem;line-height:1.24}main p{line-height:1.55}main .workshop-table{overflow-x:auto}main table{width:100%;border-collapse:collapse}main th,main td{padding:.6rem;text-align:start;vertical-align:top;border-bottom:1px solid #315063}main th{color:#cbf1ff}main a:focus-visible{outline:2px solid #7ddfff;outline-offset:3px}</style>
 </head>
 <body><nav><a href="../../">ARAAMA home</a><details class="languages"><summary>Language · English</summary><ul><li><a href="../../labs/mqtt-dashboard-tags/" lang="en" hreflang="en" aria-current="page">English</a></li><li><a href="../../ru/labs/mqtt-dashboard-tags/" lang="ru" hreflang="ru">Русский</a></li><li><a href="../../cs/labs/mqtt-dashboard-tags/" lang="cs" hreflang="cs">Čeština</a></li></ul></details></nav>
-<main><h1>Build four dashboard cards from one MQTT topic</h1>
-<p>For a room sensor I wanted two gauges, one for temperature and one for humidity, with a history chart below each. Entering the topic and JSON path four times leaves four places to check when a chart stays empty.</p>
-<p>In the RoomAir workshop the generator published <code>{"temperature_c":22.0,"humidity_pct":49.6}</code> to <code>lab/room-air/state</code> on a local broker. The next message still reported 22.0 °C, but humidity had dropped to 49.4%. That pair makes a quick check for both bindings.</p>
-<h2>Set up the dashboard</h2><ol><li><p>Start the generator, open <em>MQTT search</em> and select <code>lab/room-air/state</code>. Pick <code>$.temperature_c</code> and save the binding as a temperature tag in °C. Save <code>$.humidity_pct</code> as a second tag in percent.</p><figure><img width="789" height="703" src="../../labs/files/settings/mqtt-room-en.webp" alt="RoomAir temperature tag showing the topic lab/room-air/state and field $.temperature_c."></figure></li><li><p>Enable history on both tags. Choose the same temperature tag for the temperature gauge and its chart. Do the same for humidity.</p></li><li><p>The supplied project records changes. On the second message the humidity gauge should drop from 49.6% to 49.4%, while the temperature gauge stays at 22.0 °C. An unchanged temperature does not need another sample in that history. The download includes the panel and a generator so you can try this without an ESP32. <a href="https://groromario77-collab.github.io/ARAAMA-Universal-HMI-Dashboard/labs/room-air/">RoomAir workshop and downloads</a></p></li></ol></main></body></html>
+<main><h1>One MQTT topic, two gauges and two charts</h1>
+<p>On my room dashboard I want the latest temperature and humidity at a glance, with half an hour of history below. The sensor publishes both numbers in one message. ARAAMA reads that message through two tags, each with its own JSON field, unit and history.</p>
+<p><a href="#network">Broker connection</a> · <a href="#temperature">Temperature</a> · <a href="#humidity">Humidity</a> · <a href="#result">Check the four cards</a></p>
+<h2 id="network">1. Connect the tablet to the broker</h2>
+<p>You need ARAAMA 0.1.10 on Android, Python 3 and the Mosquitto client <code>mosquitto_pub</code> on a computer, and an MQTT broker both devices can reach. The generator supplies the readings for this exercise. <a href="../files/ARAAMA-ESP32-labs.zip">Download the generator and RoomAir panel</a> · <a href="../room-air/">ESP32 and DHT22 wiring</a></p>
+<p>To try the finished layout, export your current project in <strong>Settings → Projects</strong>, then open <code>RoomAir/panel.json</code> from the extracted archive. It already contains four cards. To build them yourself, start on an empty screen in a practice project.</p>
+<p>Open <strong>Settings → Network</strong>. Select <strong>Workshop broker</strong> in the imported project, or choose <strong>+ Connection</strong> and give it that name. Select <strong>MQTT 3.1.1</strong>. Replace <code>broker.example</code> with your broker's host name or IP address, without <code>mqtt://</code>. This example uses port <strong>1883</strong> with TLS off. For your own broker, enter its port, TLS setting and credentials. The sample uses a <strong>5 s</strong> reconnect delay, <strong>30 s</strong> keepalive and <strong>5000 ms</strong> timeout. Select <strong>Save connection</strong>.</p>
+<figure><a href="../files/steps/room-network-en.webp"><img src="../files/steps/room-network-en.webp" width="692" height="716" loading="lazy" decoding="async" alt="Network settings. Replace broker.example in the downloaded panel with your broker address."></a><figcaption>Network settings. Replace broker.example in the downloaded panel with your broker address.</figcaption></figure>
+
+<p>Extract the archive and run this command from the directory containing <code>simulate.py</code>. Substitute the address of the broker you entered on the tablet. Omitting <code>--host</code> prints the samples to the terminal only.</p>
+<pre><code>python simulate.py room --host 192.168.1.20 --port 1883
+</code></pre>
+<p>A message arrives on <code>lab/room-air/state</code> every five seconds. To see it, open <strong>Settings → MQTT search</strong>, select <strong>Workshop broker</strong>, choose ordinary topics and enter the filter <code>lab/room-air/#</code>. Start the search and expand <strong>lab → room-air → state</strong>. Look for the numbers <code>temperature_c</code> and <code>humidity_pct</code>. The search accepts a wildcard. Both tags below use the full state topic.</p>
+<figure><a href="../files/steps/room-scan-en.webp"><img src="../files/steps/room-scan-en.webp" width="320" height="95" loading="lazy" decoding="async" alt="Limit the scan to the branch used by the generator."></a><figcaption>Limit the scan to the branch used by the generator.</figcaption></figure>
+
+<figure><a href="../files/steps/room-fields-en.webp"><img src="../files/steps/room-fields-en.webp" width="931" height="986" loading="lazy" decoding="async" alt="The MQTT search screen parses the sample into two fields, $.temperature_c = 22 and $.humidity_pct = 49.6."></a><figcaption>The MQTT search screen parses the sample into two fields, $.temperature_c = 22 and $.humidity_pct = 49.6.</figcaption></figure>
+
+<p>Open the details for a discovered field and use <strong>Copy field</strong> to copy its JSON path. Paste it into the tag form below. This also works for longer paths from real sensors. The tag names below match the RoomAir file.</p>
+<h2 id="temperature">2. Air temperature</h2>
+<p><strong>Tag.</strong> Open <strong>Settings → Tags → + Tag</strong>. Enter <strong>Air temperature</strong> as the name, <strong>Workshop broker</strong> as the connection, <strong>Float</strong> as the variable type, <strong>Read only</strong> for access and <strong>°C</strong> for the unit. In the MQTT receive section enter <code>lab/room-air/state</code>, select <strong>JSON</strong> and enter <code>$.temperature_c</code> as the field path. The value already represents degrees Celsius. Use multiplier <strong>1</strong>, offset <strong>0</strong> and a stale timeout of <strong>30 s</strong>. Select <strong>Save tag</strong>.</p>
+<figure><a href="../files/steps/temperature-tag-en.webp"><img src="../files/steps/temperature-tag-en.webp" width="692" height="646" loading="lazy" decoding="async" alt="Temperature binding with the field path $.temperature_c."></a><figcaption>Temperature binding with the field path $.temperature_c.</figcaption></figure>
+
+<p><strong>Card 1 — gauge.</strong> In the saved tag, go to <strong>Used on screens</strong>. Select <strong>Analog gauge</strong>, then <strong>Create a card for this tag</strong>. Open the new card's parameters and keep the title <strong>Air temperature</strong>. Under <strong>Display scale</strong>, enter Min <strong>0</strong>, Max <strong>40</strong>, unit <strong>°C</strong> and <strong>1</strong> decimal place. Apply the Min/Max values if the button appears. A sample of 22 should read 22 °C on the dial.</p>
+<figure><a href="../files/steps/temperature-pick-en.webp"><img src="../files/steps/temperature-pick-en.webp" width="692" height="87" loading="lazy" decoding="async" alt="Create an analog gauge from Air temperature."></a><figcaption>Create an analog gauge from Air temperature.</figcaption></figure>
+
+<figure><a href="../files/steps/temperature-scale-en.webp"><img src="../files/steps/temperature-scale-en.webp" width="1150" height="333" loading="lazy" decoding="async" alt="Temperature gauge limits and precision."></a><figcaption>Temperature gauge limits and precision.</figcaption></figure>
+
+<p>To match the finished panel, select the <strong>Neon</strong> screen theme in the gauge parameters, set the card colour to cyan and choose the <strong>Gradient arc</strong> gauge face. The theme applies to the screen. The colour and face belong to this card.</p>
+<figure><a href="../files/steps/temperature-face-en.webp"><img src="../files/steps/temperature-face-en.webp" width="1113" height="1049" loading="lazy" decoding="async" alt="Gradient arc is selected in the temperature gauge settings."></a><figcaption>Gradient arc is selected in the temperature gauge settings.</figcaption></figure>
+
+<p><strong>Card 2 — chart.</strong> Go back to <strong>Tags → Air temperature → Used on screens</strong>. Select <strong>Trend</strong> and <strong>Create a card for this tag</strong>. In the card parameters, name it <strong>Air temperature history</strong>. Open the chart's <strong>Period and recording</strong>, choose <strong>Custom period</strong> and enter <strong>0.5 hours</strong> (30 minutes). For recording, choose <strong>On change</strong>. Enable the option to keep data between Android sessions and save.</p>
+<figure><a href="../files/steps/temperature-trend-pick-en.webp"><img src="../files/steps/temperature-trend-pick-en.webp" width="692" height="87" loading="lazy" decoding="async" alt="The temperature gauge and trend share one tag."></a><figcaption>The temperature gauge and trend share one tag.</figcaption></figure>
+
+<figure><a href="../files/steps/temperature-window-en.webp"><img src="../files/steps/temperature-window-en.webp" width="1035" height="612" loading="lazy" decoding="async" alt="Air temperature history displays a half-hour window."></a><figcaption>Air temperature history displays a half-hour window.</figcaption></figure>
+
+<p><strong>Temperature history.</strong> Open <strong>Tags → Measurement history</strong> and choose <strong>Air temperature</strong> at the top. Enable history, select <strong>On change</strong>, enter <strong>24 hours</strong> and <strong>500 samples</strong>, then save the policy. These are the limits for the tag's session history. The 30-minute display window belongs to the individual chart.</p>
+<figure><a href="../files/steps/temperature-history-en.webp"><img src="../files/steps/temperature-history-en.webp" width="807" height="780" loading="lazy" decoding="async" alt="Recording policy for Air temperature. Identical consecutive samples do not add a point."></a><figcaption>Recording policy for Air temperature. Identical consecutive samples do not add a point.</figcaption></figure>
+
+<h2 id="humidity">3. Relative humidity</h2>
+<p><strong>Tag.</strong> Open <strong>Settings → Tags → + Tag</strong>. Name it <strong>Relative humidity</strong>. Choose <strong>Workshop broker</strong>, <strong>Float</strong>, <strong>Read only</strong>, unit <strong>%</strong>. Enter <code>lab/room-air/state</code>, select <strong>JSON</strong> and enter <strong><code>$.humidity_pct</code></strong> as the field path. The generator already reports percent. A value of 49.6 should read 49.6 % on the card. Leave the multiplier at <strong>1</strong>, offset at <strong>0</strong>, stale timeout at <strong>30 s</strong> and select <strong>Save tag</strong>.</p>
+<figure><a href="../files/steps/humidity-tag-en.webp"><img src="../files/steps/humidity-tag-en.webp" width="692" height="646" loading="lazy" decoding="async" alt="The $.humidity_pct field extracts the second number from the same MQTT message."></a><figcaption>The $.humidity_pct field extracts the second number from the same MQTT message.</figcaption></figure>
+
+<p><strong>Card 3 — gauge.</strong> Open <strong>Relative humidity → Used on screens</strong>. Select <strong>Analog gauge → Create a card for this tag</strong>. In the card parameters, keep the title <strong>Relative humidity</strong>. Under <strong>Display scale</strong>, enter Min <strong>0</strong>, Max <strong>100</strong>, unit <strong>%</strong>, and <strong>1</strong> decimal place. Apply Min/Max if prompted. A reading near 50 % puts the needle halfway across the scale.</p>
+<figure><a href="../files/steps/humidity-pick-en.webp"><img src="../files/steps/humidity-pick-en.webp" width="692" height="87" loading="lazy" decoding="async" alt="The new Relative humidity card is an analog gauge."></a><figcaption>The new Relative humidity card is an analog gauge.</figcaption></figure>
+
+<figure><a href="../files/steps/humidity-scale-en.webp"><img src="../files/steps/humidity-scale-en.webp" width="1150" height="333" loading="lazy" decoding="async" alt="The humidity gauge spans 0–100 %."></a><figcaption>The humidity gauge spans 0–100 %.</figcaption></figure>
+
+<p>Set the humidity card colour to green and select the <strong>Cyan needle</strong> gauge face. In the finished layout, temperature occupies the left half of the top row and humidity the right half. In edit mode, drag each card into position and drag its lower corner to resize it. Place the temperature chart across the full width below the gauges and the humidity chart underneath.</p>
+<figure><a href="../files/steps/humidity-face-en.webp"><img src="../files/steps/humidity-face-en.webp" width="1113" height="1049" loading="lazy" decoding="async" alt="Cyan needle selected. The menu uses a preview value. Run mode displays the incoming reading."></a><figcaption>Cyan needle selected. The menu uses a preview value. Run mode displays the incoming reading.</figcaption></figure>
+
+<p><strong>Card 4 — chart.</strong> Go to <strong>Tags → Relative humidity → Used on screens</strong>. Select <strong>Trend</strong> and <strong>Create a card for this tag</strong>. Set the title to <strong>Relative humidity history</strong>. Open <strong>Period and recording</strong> for this chart, select <strong>Custom period</strong>, enter <strong>0.5 hours</strong>, and choose <strong>On change</strong>. Enable retention between Android sessions and save.</p>
+<figure><a href="../files/steps/humidity-trend-pick-en.webp"><img src="../files/steps/humidity-trend-pick-en.webp" width="692" height="87" loading="lazy" decoding="async" alt="Create the second chart from Relative humidity."></a><figcaption>Create the second chart from Relative humidity.</figcaption></figure>
+
+<figure><a href="../files/steps/humidity-window-en.webp"><img src="../files/steps/humidity-window-en.webp" width="1035" height="612" loading="lazy" decoding="async" alt="Display and recording settings for Relative humidity history."></a><figcaption>Display and recording settings for Relative humidity history.</figcaption></figure>
+
+<p><strong>Humidity history.</strong> In <strong>Tags → Measurement history</strong>, choose <strong>Relative humidity</strong>. Enable recording, select <strong>On change</strong>, retain <strong>24 hours</strong>, and set a maximum of <strong>500 samples</strong>. Save the policy. A change in humidity now adds a point to this chart even when the temperature stays constant.</p>
+<figure><a href="../files/steps/humidity-history-en.webp"><img src="../files/steps/humidity-history-en.webp" width="807" height="780" loading="lazy" decoding="async" alt="The tag selector identifies which history you are configuring."></a><figcaption>The tag selector identifies which history you are configuring.</figcaption></figure>
+
+<h2 id="result">4. Check all four cards</h2>
+<p>Select <strong>Run</strong>. Compare the first two messages with the two gauges and the number of points in a fresh session.</p>
+<div class="workshop-table"><table>
+<thead>
+<tr>
+<th>Time since start</th>
+<th style="text-align: right;">Temperature gauge</th>
+<th style="text-align: right;">Humidity gauge</th>
+<th style="text-align: right;">Temperature / humidity points</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0 s</td>
+<td style="text-align: right;">22.0 °C</td>
+<td style="text-align: right;">49.6 %</td>
+<td style="text-align: right;">1 / 1</td>
+</tr>
+<tr>
+<td>5 s</td>
+<td style="text-align: right;">22.0 °C</td>
+<td style="text-align: right;">49.4 %</td>
+<td style="text-align: right;">1 / 2</td>
+</tr>
+</tbody>
+</table></div>
+<figure><a href="../files/steps/room-result-en.webp"><img src="../files/steps/room-result-en.webp" width="1132" height="768" loading="lazy" decoding="async" alt="RoomAir running in the 0.1.10 interface. After 30 minutes of generator data, the gauges read 21.4 °C and 51.3 %. Each trend shows its own history."></a><figcaption>RoomAir running in the 0.1.10 interface. After 30 minutes of generator data, the gauges read 21.4 °C and 51.3 %. Each trend shows its own history.</figcaption></figure>
+
+<p>For this capture, the interface received 361 generator messages on an accelerated clock. Temperature recorded 91 points and humidity recorded 266. If both gauges read 22, inspect the JSON path on <strong>Relative humidity</strong>. If the humidity gauge changes but its chart stays empty, check the chart's tag and the recording policy on <strong>Relative humidity</strong>. If both gauges are empty, first check for a fresh message in <strong>MQTT search</strong>.</p></main></body></html>
