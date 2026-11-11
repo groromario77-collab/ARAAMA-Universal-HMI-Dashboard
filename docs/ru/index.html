@@ -30,7 +30,7 @@
 <main>
 <header>
   <div>
-    <h1>ARAAMA</h1>
+    <h1 class="brand"><img src="../araama-logo.webp" width="256" height="256" alt="">ARAAMA</h1>
     <h2>Датчики, счётчики и выключатели на одном Android-планшете</h2>
     <p>На одном экране можно собрать температуру с ESP32, выключатель из Home Assistant и мощность со счётчика Modbus. В настройках карточки видно, откуда приходит показание и куда уходит команда.</p>
     <p>Бесплатно · Android 8.0 и новее</p>
@@ -52,7 +52,7 @@
   </div>
   <a href="https://github.com/groromario77-collab/ARAAMA-Universal-HMI-Dashboard/tree/main/examples"><img src="https://raw.githubusercontent.com/groromario77-collab/ARAAMA-Universal-HMI-Dashboard/df6d8b613c68800453d1d92a6505d6f9eeb0ee4c/examples/01-neon-dashboard.jpg" width="800" height="1280" alt="Панель на планшете с показаниями климата, погодой, напряжением, током, выключателями и графиком температуры"></a>
 </header>
-<section><h2>Практикумы с датчиками ESP32</h2><ul><li><a href="labs/room-air/">Комнатный климат на планшете · DHT22</a></li><li><a href="labs/window-barometer/">Барометр на подоконнике · BMP280</a></li></ul></section>
+<section><h2>Практикумы с датчиками ESP32</h2><ul><li><a href="labs/room-air/">Комнатный климат на планшете · DHT22</a></li><li><a href="labs/window-barometer/">Барометр на подоконнике · BMP280</a></li><li><a href="labs/aquarium/">Аквариум на планшете: температура воды и циклы нагрева</a></li></ul></section>
 <section><h2>От сообщения MQTT до графика температуры</h2><p>Подключите планшет к MQTT-брокеру и дождитесь сообщения от ESP32. В разделе «Поиск MQTT» выберите топик и поле температуры в сообщении JSON. Привяжите поле к шкале и включите запись истории, чтобы увидеть, как меняется температура.</p></section>
 <section><h2>Home Assistant и Modbus на одной панели</h2><p>Импортируйте сущности нужной комнаты из Home Assistant. Для счётчика выберите Modbus TCP или подключение через шлюз RTU поверх TCP. Найдите регистр мощности в карте регистров своей модели. Панель также принимает показания по HTTP/REST, WebSocket и Socket.IO.</p></section>
 <section>

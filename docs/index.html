@@ -30,7 +30,7 @@
 <main>
 <header>
   <div>
-    <h1>ARAAMA</h1>
+    <h1 class="brand"><img src="./araama-logo.webp" width="256" height="256" alt="">ARAAMA</h1>
     <h2>One Android tablet for your sensors, meters and switches</h2>
     <p>Put an ESP32 temperature sensor, a Home Assistant switch and a Modbus power meter on one dashboard. Trace each reading to its source and see where each control sends its command.</p>
     <p>Free · Android 8.0 or newer</p>
@@ -52,7 +52,7 @@
   </div>
   <a href="https://github.com/groromario77-collab/ARAAMA-Universal-HMI-Dashboard/tree/main/examples"><img src="https://raw.githubusercontent.com/groromario77-collab/ARAAMA-Universal-HMI-Dashboard/df6d8b613c68800453d1d92a6505d6f9eeb0ee4c/examples/01-neon-dashboard.jpg" width="800" height="1280" alt="Tablet showing room climate, weather, voltage, current, switches and a temperature chart"></a>
 </header>
-<section><h2>ESP32 sensor workshops</h2><ul><li><a href="labs/room-air/">Room air on a tablet · DHT22</a></li><li><a href="labs/window-barometer/">A barometer by the window · BMP280</a></li></ul></section>
+<section><h2>ESP32 sensor workshops</h2><ul><li><a href="labs/room-air/">Room air on a tablet · DHT22</a></li><li><a href="labs/window-barometer/">A barometer by the window · BMP280</a></li><li><a href="labs/aquarium/">Aquarium temperature and heater cycles on an Android tablet</a></li></ul></section>
 <section><h2>From an MQTT message to a temperature chart</h2><p>Connect the tablet to your MQTT broker and let your ESP32 publish a reading. In MQTT search, select the topic and the temperature field from its JSON payload. Bind a gauge to that field and enable history to chart the readings over time.</p></section>
 <section><h2>Home Assistant and Modbus on the same panel</h2><p>Import a room’s entities from Home Assistant. To add a meter, connect through Modbus TCP or an RTU-over-TCP gateway. Select the power register from the manual for your meter. HTTP/REST, WebSocket and Socket.IO sources can also supply readings.</p></section>
 <section>
