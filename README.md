@@ -20,6 +20,7 @@ Each workshop includes a ready-to-import Android panel and a Python generator. C
 - [Aquarium temperature and heater cycles](https://groromario77-collab.github.io/ARAAMA-Universal-HMI-Dashboard/labs/aquarium/) — compare the water temperature curve with the heater's on/off history. You can run the whole exercise without a tank.
 - [Build four dashboard cards from one MQTT topic](https://groromario77-collab.github.io/ARAAMA-Universal-HMI-Dashboard/labs/mqtt-dashboard-tags/)
 - [Read an Eastron meter’s active power on an Android tablet](https://groromario77-collab.github.io/ARAAMA-Universal-HMI-Dashboard/labs/eastron-sdm120-modbus/)
+- [Compare overnight electric underfloor heating schedules in a virtual workshop](https://groromario77-collab.github.io/ARAAMA-Universal-HMI-Dashboard/labs/night-heating/)
 
 ## Connect a data source
 
