@@ -124,7 +124,7 @@
             ]
           },
           "content": {
-            "text": "Текст",
+            "text": "Text",
             "image": "",
             "fit": "contain",
             "align": "center",
@@ -132,15 +132,15 @@
           },
           "options": [
             {
-              "label": "Авто",
+              "label": "Auto",
               "value": "AUTO"
             },
             {
-              "label": "Ручной",
+              "label": "Manual",
               "value": "MANUAL"
             },
             {
-              "label": "Выключено",
+              "label": "Off",
               "value": "OFF"
             }
           ],

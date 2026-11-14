@@ -18,7 +18,7 @@
 <p><a href="#source">Zdroj dat</a> · <a href="#network">Připojení brány</a> · <a href="#register">Nastavení registru</a> · <a href="#card">Číselný displej</a> · <a href="#result">Kontrola údaje</a></p>
 <h2 id="source">1. Vyberte zdroj měření</h2>
 <p><strong>S elektroměrem.</strong> Potřebujete ARAAMA 0.1.10, nainstalovaný SDM120-Modbus, bránu Ethernet nebo Wi-Fi ↔ RS-485 a přístup k nastavení brány. Zjistěte její síťovou adresu, port, formát přenosu a adresu elektroměru na sběrnici (<strong>Unit ID</strong>). Přenosová rychlost, parita a počet stop bitů se na straně RS-485 musí shodovat. Brána musí být z tabletu dostupná po síti.</p>
-<p><strong>S počítačem.</strong> <a href="../../../labs/files/SDM120/ARAAMA-SDM120.zip">Stáhněte si cvičný elektroměr a hotový panel</a>. Archiv rozbalte na počítači s Pythonem 3. Ve složce se souborem <code>simulate_meter.py</code> spusťte příkaz níže. Za <code>192.168.1.20</code> dosaďte <strong>lokální adresu tohoto počítače</strong>. Tablet připojte ke stejné síti.</p>
+<p><strong>S počítačem.</strong> <a href="../../../labs/files/SDM120/ARAAMA-SDM120-CS.zip">Stáhněte si cvičný elektroměr a hotový panel</a>. Archiv rozbalte na počítači s Pythonem 3. Ve složce se souborem <code>simulate_meter.py</code> spusťte příkaz níže. Za <code>192.168.1.20</code> dosaďte <strong>lokální adresu tohoto počítače</strong>. Tablet připojte ke stejné síti.</p>
 <pre><code>python simulate_meter.py --bind 192.168.1.20 --port 1502 --watts 720
 </code></pre>
 <p>Terminál nechte otevřený. Server odpovídá na čtení přes Modbus TCP pro Unit ID <strong>1</strong>. Pro jiný údaj ukončete server pomocí Ctrl+C a spusťte jej s <code>--watts 350</code>. Chcete-li použít hotový displej, nejprve v <strong>Nastavení → Projekty</strong> exportujte aktuální projekt a otevřete přiložený <code>panel.json</code>. Pro ruční sestavení začněte na prázdné cvičné obrazovce. <a href="https://github.com/groromario77-collab/ARAAMA-Universal-HMI-Dashboard/releases/tag/v0.1.10">ARAAMA 0.1.10 a příručky</a></p>
@@ -69,7 +69,7 @@
 
 <p>Stiskněte <strong>Uložit připojení</strong>. Síťová adresa určuje bránu, zatímco Unit ID vybírá přístroj na sběrnici za ní. Výchozí limit 125 registrů na jeden dotaz zde vyhovuje. Jeden údaj o výkonu zabírá dva sousední registry.</p>
 <h2 id="register">3. Vytvořte tag pro činný výkon</h2>
-<p>Otevřete <strong>Nastavení → Tagy → + Tag</strong>. Zadejte název <strong>Active power</strong>, připojení <strong>SDM120</strong> a přístup pouze pro čtení. V hotovém panelu otevřete existující tag <strong>Active power</strong>. V části pro čtení nastavte:</p>
+<p>Otevřete <strong>Nastavení → Tagy → + Tag</strong>. Zadejte název <strong>Činný výkon</strong>, připojení <strong>SDM120</strong> a přístup pouze pro čtení. V hotovém panelu otevřete existující tag <strong>Činný výkon</strong>. V části pro čtení nastavte:</p>
 <div class="workshop-table"><table>
 <thead>
 <tr>
@@ -105,10 +105,10 @@
 </tbody>
 </table></div>
 <p>V mapě tohoto modelu má řádek <strong>30013 — Active power</strong> počáteční adresu <strong>0x000C</strong>, tedy desítkově <strong>12</strong>. ARAAMA očekává adresu v paketu. Zkontrolujte výsledný zápis <code>input/12/float32/ABCD</code> a zvolte <strong>Uložit tag</strong>. <a href="https://www.eastroneurope.com/images/uploads/products/protocol/SDM120-MODBUS_Protocol.pdf#page=5">Mapa registrů Eastron, strana 5</a></p>
-<figure><a href="../../../labs/files/steps/sdm-tag-cs.webp"><img src="../../../labs/files/steps/sdm-tag-cs.webp" width="692" height="636" loading="lazy" decoding="async" alt="Tag Active power čte na vstupní adrese 12 hodnotu Float32 ve wattech."></a><figcaption>Tag Active power čte na vstupní adrese 12 hodnotu Float32 ve wattech.</figcaption></figure>
+<figure><a href="../../../labs/files/steps/sdm-tag-cs.webp"><img src="../../../labs/files/steps/sdm-tag-cs.webp" width="692" height="636" loading="lazy" decoding="async" alt="Tag Činný výkon čte na vstupní adrese 12 hodnotu Float32 ve wattech."></a><figcaption>Tag Činný výkon čte na vstupní adrese 12 hodnotu Float32 ve wattech.</figcaption></figure>
 
 <h2 id="card">4. Přidejte číselný displej</h2>
-<p>U uloženého tagu <strong>Active power</strong> otevřete <strong>Použití na obrazovkách</strong>. Zvolte <strong>Číselný displej → Vytvořit kartu tohoto tagu</strong>. V parametrech karty ponechte název <strong>Active power</strong>, jednotku <strong>W</strong> a nastavte <strong>0</strong> desetinných míst. Číselný displej nepotřebuje hranice stupnice. Hotový projekt už má k tagu přiřazený jeden displej.</p>
+<p>U uloženého tagu <strong>Činný výkon</strong> otevřete <strong>Použití na obrazovkách</strong>. Zvolte <strong>Číselný displej → Vytvořit kartu tohoto tagu</strong>. V parametrech karty ponechte název <strong>Činný výkon</strong>, jednotku <strong>W</strong> a nastavte <strong>0</strong> desetinných míst. Číselný displej nepotřebuje hranice stupnice. Hotový projekt už má k tagu přiřazený jeden displej.</p>
 <figure><a href="../../../labs/files/steps/sdm-pick-cs.webp"><img src="../../../labs/files/steps/sdm-pick-cs.webp" width="692" height="87" loading="lazy" decoding="async" alt="Vytvoření číselného displeje pro činný výkon elektroměru."></a><figcaption>Vytvoření číselného displeje pro činný výkon elektroměru.</figcaption></figure>
 
 <figure><a href="../../../labs/files/steps/sdm-format-cs.webp"><img src="../../../labs/files/steps/sdm-format-cs.webp" width="1150" height="333" loading="lazy" decoding="async" alt="Karta zobrazuje výkon v celých wattech."></a><figcaption>Karta zobrazuje výkon v celých wattech.</figcaption></figure>
